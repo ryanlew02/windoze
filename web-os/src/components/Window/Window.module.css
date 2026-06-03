@@ -1,0 +1,83 @@
+.window {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: #1e1e2e;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 300px;
+  min-height: 200px;
+  transition: box-shadow 0.15s ease;
+}
+
+.focused {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px;
+  height: 36px;
+  background: #2a2a3e;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.titlebar:active {
+  cursor: grabbing;
+}
+
+.icon {
+  font-size: 14px;
+}
+
+.title {
+  flex: 1;
+  font-size: 13px;
+  color: #cdd6f4;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.controls {
+  display: flex;
+  gap: 4px;
+}
+
+.controls button {
+  width: 28px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #cdd6f4;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+}
+
+.controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.close:hover {
+  background: #f38ba8 !important;
+  color: #1e1e2e !important;
+}
+
+.content {
+  flex: 1;
+  overflow: auto;
+  color: #cdd6f4;
+}

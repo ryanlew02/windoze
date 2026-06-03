@@ -1,0 +1,17 @@
+.desktop {
+  position: fixed;
+  inset: 0;
+  bottom: 44px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  overflow: hidden;
+}
+
+.icons {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 16px 8px;
+  align-content: flex-start;
+  height: 100%;
+}

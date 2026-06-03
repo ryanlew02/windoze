@@ -1,0 +1,84 @@
+.explorer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #181825;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #1e1e2e;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.toolBtn {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #313244;
+  color: #cdd6f4;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toolBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.toolBtn:not(:disabled):hover {
+  background: #45475a;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: #89b4fa;
+}
+
+.fileList {
+  flex: 1;
+  padding: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 8px;
+  width: 80px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.itemIcon {
+  font-size: 28px;
+}
+
+.itemName {
+  font-size: 11px;
+  color: #cdd6f4;
+  text-align: center;
+  word-break: break-all;
+}
+
+.empty {
+  color: #585b70;
+  font-size: 13px;
+  padding: 20px;
+}

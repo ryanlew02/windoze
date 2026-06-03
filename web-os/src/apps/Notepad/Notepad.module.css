@@ -1,0 +1,21 @@
+.notepad {
+  display: flex;
+  height: 100%;
+}
+
+.editor {
+  flex: 1;
+  background: #181825;
+  color: #cdd6f4;
+  border: none;
+  padding: 12px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+}
+
+.editor::placeholder {
+  color: #585b70;
+}
