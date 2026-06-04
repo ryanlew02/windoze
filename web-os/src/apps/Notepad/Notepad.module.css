@@ -5,8 +5,8 @@
 
 .editor {
   flex: 1;
-  background: #181825;
-  color: #cdd6f4;
+  background: var(--bg-base);
+  color: var(--text-primary);
   border: none;
   padding: 12px;
   font-family: 'Consolas', 'Monaco', monospace;
@@ -17,5 +17,5 @@
 }
 
 .editor::placeholder {
-  color: #585b70;
+  color: var(--text-muted);
 }

@@ -1,3 +1,25 @@
+:root {
+  --bg-deep:              #11111b;
+  --bg-base:              #181825;
+  --bg-surface:           #1e1e2e;
+  --bg-overlay:           #2a2a3e;
+  --btn-bg:               #313244;
+  --btn-hover:            #45475a;
+  --text-primary:         #cdd6f4;
+  --text-muted:           #585b70;
+  --accent:               #89b4fa;
+  --accent-hover:         #b4d0fe;
+  --accent-dim:           rgba(137, 180, 250, 0.2);
+  --accent-glow:          rgba(137, 180, 250, 0.6);
+  --close-color:          #f38ba8;
+  --border:               rgba(255, 255, 255, 0.08);
+  --border-subtle:        rgba(255, 255, 255, 0.06);
+  --border-focused:       rgba(255, 255, 255, 0.15);
+  --hover-overlay:        rgba(255, 255, 255, 0.08);
+  --hover-overlay-strong: rgba(255, 255, 255, 0.12);
+  --taskbar-bg:           rgba(24, 24, 37, 0.9);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }

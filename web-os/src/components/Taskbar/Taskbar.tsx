@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useWindowStore } from '../../store/useWindowStore';
 import { StartMenu } from '../StartMenu/StartMenu';
+import { FactionPicker } from '../FactionPicker/FactionPicker';
 import styles from './Taskbar.module.css';
 
 export function Taskbar() {
@@ -59,6 +60,8 @@ export function Taskbar() {
           </button>
         ))}
       </div>
+
+      <FactionPicker />
 
       <div className={styles.clock}>
         {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

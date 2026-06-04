@@ -2,7 +2,7 @@
   position: fixed;
   inset: 0;
   bottom: 44px;
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  background: url('/src/assets/chicagobackground.avif') center/cover no-repeat;
   overflow: hidden;
 }
 

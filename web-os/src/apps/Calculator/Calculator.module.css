@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: #181825;
+  background: var(--bg-base);
   padding: 12px;
   gap: 8px;
 }
@@ -14,20 +14,20 @@
   justify-content: flex-end;
   align-items: flex-end;
   padding: 8px;
-  background: #11111b;
+  background: var(--bg-deep);
   border-radius: 6px;
   overflow: hidden;
 }
 
 .opLabel {
   font-size: 16px;
-  color: #89b4fa;
+  color: var(--accent);
   min-height: 20px;
 }
 
 .value {
   font-size: 36px;
-  color: #cdd6f4;
+  color: var(--text-primary);
   font-weight: 300;
   word-break: break-all;
 }
@@ -42,25 +42,25 @@
   padding: 14px;
   border: none;
   border-radius: 8px;
-  background: #313244;
-  color: #cdd6f4;
+  background: var(--btn-bg);
+  color: var(--text-primary);
   font-size: 16px;
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .btn:hover {
-  background: #45475a;
+  background: var(--btn-hover);
 }
 
 .op {
-  background: #89b4fa;
-  color: #1e1e2e;
+  background: var(--accent);
+  color: var(--bg-surface);
   font-weight: 600;
 }
 
 .op:hover {
-  background: #b4d0fe;
+  background: var(--accent-hover);
 }
 
 .wide {

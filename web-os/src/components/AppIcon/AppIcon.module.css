@@ -13,11 +13,11 @@
 }
 
 .icon:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--hover-overlay-strong);
 }
 
 .icon:focus {
-  outline: 2px solid rgba(137, 180, 250, 0.6);
+  outline: 2px solid var(--accent-glow);
   outline-offset: 2px;
 }
 

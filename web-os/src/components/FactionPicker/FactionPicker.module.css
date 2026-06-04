@@ -1,0 +1,103 @@
+.wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.btn {
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.1s, border-color 0.1s;
+  flex-shrink: 0;
+}
+
+.btn:hover,
+.btnOpen {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  filter: brightness(1.2);
+}
+
+.btnSymbol {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.btnName {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.popup {
+  position: absolute;
+  bottom: 48px;
+  right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 190px;
+  animation: slideUp 0.15s ease;
+  z-index: 9000;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0);   opacity: 1; }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.1s;
+  text-align: left;
+  width: 100%;
+}
+
+.option:hover {
+  background: var(--hover-overlay);
+}
+
+.active {
+  background: var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  padding-left: 9px;
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.symbol {
+  font-size: 16px;
+  width: 22px;
+  text-align: center;
+}
+
+.name {
+  flex: 1;
+}
