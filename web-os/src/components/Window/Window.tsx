@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useWindowStore } from '../../store/useWindowStore';
 import { useDraggable } from '../../hooks/useDraggable';
+import { useResizable, type ResizeDir } from '../../hooks/useResizable';
 import type { WindowState } from '../../types';
 import styles from './Window.module.css';
 
@@ -10,15 +11,23 @@ interface Props {
 }
 
 export function Window({ win, children }: Props) {
-  const { closeWindow, focusWindow, minimizeWindow, toggleMaximize, moveWindow } =
+  const { closeWindow, focusWindow, minimizeWindow, toggleMaximize, moveWindow, resizeMoveWindow } =
     useWindowStore();
 
   const handleMove = useCallback(
     (x: number, y: number) => moveWindow(win.id, x, y),
-    [win.id, moveWindow]
+    [win.id, moveWindow],
+  );
+
+  const handleResize = useCallback(
+    (x: number, y: number, w: number, h: number) => resizeMoveWindow(win.id, x, y, w, h),
+    [win.id, resizeMoveWindow],
   );
 
   const { onMouseDown } = useDraggable(handleMove);
+  const { onMouseDown: onResizeMouseDown } = useResizable(handleResize);
+
+  const dirs: ResizeDir[] = ['n', 'ne', 'e', 'se', 's', 'sw', 'w', 'nw'];
 
   if (win.isMinimized) return null;
 
@@ -32,6 +41,13 @@ export function Window({ win, children }: Props) {
       style={style}
       onMouseDown={() => focusWindow(win.id)}
     >
+      {!win.isMaximized && dirs.map((dir) => (
+        <div
+          key={dir}
+          className={`${styles.handle} ${styles[`handle_${dir}`]}`}
+          onMouseDown={(e) => onResizeMouseDown(e, dir, win.x, win.y, win.width, win.height)}
+        />
+      ))}
       <div
         className={styles.titlebar}
         onMouseDown={(e) => onMouseDown(e, win.x, win.y)}

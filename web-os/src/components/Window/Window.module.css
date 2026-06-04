@@ -81,3 +81,19 @@
   overflow: auto;
   color: var(--text-primary);
 }
+
+/* ── Resize handles ── */
+
+.handle {
+  position: absolute;
+  z-index: 10;
+}
+
+.handle_n  { top: 0;    left: 8px;   right: 8px;  height: 5px; cursor: ns-resize;   }
+.handle_s  { bottom: 0; left: 8px;   right: 8px;  height: 5px; cursor: ns-resize;   }
+.handle_e  { top: 8px;  right: 0;    bottom: 8px; width: 5px;  cursor: ew-resize;   }
+.handle_w  { top: 8px;  left: 0;     bottom: 8px; width: 5px;  cursor: ew-resize;   }
+.handle_ne { top: 0;    right: 0;    width: 10px; height: 10px; cursor: nesw-resize; }
+.handle_nw { top: 0;    left: 0;     width: 10px; height: 10px; cursor: nwse-resize; }
+.handle_se { bottom: 0; right: 0;    width: 10px; height: 10px; cursor: nwse-resize; }
+.handle_sw { bottom: 0; left: 0;     width: 10px; height: 10px; cursor: nesw-resize; }

@@ -12,6 +12,7 @@ interface WindowStore {
   toggleMaximize: (id: string) => void;
   moveWindow: (id: string, x: number, y: number) => void;
   resizeWindow: (id: string, width: number, height: number) => void;
+  resizeMoveWindow: (id: string, x: number, y: number, width: number, height: number) => void;
 }
 
 export const useWindowStore = create<WindowStore>((set) => ({
@@ -72,6 +73,13 @@ export const useWindowStore = create<WindowStore>((set) => ({
     set((state) => ({
       windows: state.windows.map((w) =>
         w.id === id ? { ...w, width, height } : w
+      ),
+    })),
+
+  resizeMoveWindow: (id, x, y, width, height) =>
+    set((state) => ({
+      windows: state.windows.map((w) =>
+        w.id === id ? { ...w, x, y, width, height } : w
       ),
     })),
 }));

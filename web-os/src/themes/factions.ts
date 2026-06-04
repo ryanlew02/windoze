@@ -1,4 +1,4 @@
-export type FactionId = 'erudite' | 'dauntless' | 'amity' | 'abnegation' | 'candor';
+export type FactionId = 'erudite' | 'dauntless' | 'amity' | 'abnegation' | 'candor' | 'divergent';
 
 export interface Faction {
   id: FactionId;
@@ -142,6 +142,33 @@ export const factions: Faction[] = [
       '--hover-overlay':         'rgba(255, 255, 255, 0.07)',
       '--hover-overlay-strong':  'rgba(255, 255, 255, 0.14)',
       '--taskbar-bg':            'rgba(0, 0, 0, 0.95)',
+    },
+  },
+  {
+    id: 'divergent',
+    name: 'Divergent',
+    symbol: '✦',
+    color: '#ffc300',
+    vars: {
+      '--bg-deep':               '#050409',
+      '--bg-base':               '#0b0912',
+      '--bg-surface':            '#13101c',
+      '--bg-overlay':            '#1e1828',
+      '--btn-bg':                '#2a2040',
+      '--btn-hover':             '#3a2e58',
+      '--text-primary':          '#ede8ff',
+      '--text-muted':            '#6a5880',
+      '--accent':                '#ffc300',
+      '--accent-hover':          '#ffd740',
+      '--accent-dim':            'rgba(255, 195, 0, 0.18)',
+      '--accent-glow':           'rgba(255, 195, 0, 0.6)',
+      '--close-color':           '#ff9a3c',
+      '--border':                'rgba(255, 195, 0, 0.15)',
+      '--border-subtle':         'rgba(255, 195, 0, 0.08)',
+      '--border-focused':        'rgba(255, 195, 0, 0.35)',
+      '--hover-overlay':         'rgba(255, 195, 0, 0.07)',
+      '--hover-overlay-strong':  'rgba(255, 195, 0, 0.14)',
+      '--taskbar-bg':            'rgba(5, 4, 9, 0.93)',
     },
   },
 ];

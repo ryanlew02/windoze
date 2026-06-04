@@ -1,0 +1,255 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  overflow-y: auto;
+}
+
+/* ── Intro ── */
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 40px;
+  gap: 16px;
+  flex: 1;
+}
+
+.introSymbol {
+  font-size: 48px;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.introTitle {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: var(--accent);
+}
+
+.introSub {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-primary);
+  max-width: 360px;
+  line-height: 1.7;
+}
+
+.introWarning {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.beginBtn {
+  margin-top: 8px;
+  padding: 12px 36px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.beginBtn:hover {
+  background: var(--accent-dim);
+}
+
+/* ── Progress bar ── */
+
+.progress {
+  display: flex;
+  gap: 6px;
+  padding: 16px 24px 0;
+}
+
+.pip {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--btn-bg);
+  transition: background 0.2s;
+}
+
+.pipFilled {
+  background: var(--accent);
+}
+
+/* ── Question ── */
+
+.questionWrap {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.qNum {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.qText {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.answerBtn {
+  padding: 13px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.answerBtn:hover {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+}
+
+/* ── Processing ── */
+
+.processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.processingText {
+  margin: 0;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Result ── */
+
+.result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 28px 36px;
+  gap: 14px;
+  flex: 1;
+}
+
+.resultLabel {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.resultSymbol {
+  font-size: 52px;
+  line-height: 1;
+}
+
+.resultName {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 6px;
+}
+
+.resultDesc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-primary);
+  max-width: 360px;
+  line-height: 1.75;
+}
+
+.resultActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.acceptBtn {
+  width: 100%;
+  max-width: 280px;
+  padding: 12px;
+  border: 1px solid var(--faction-color);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--faction-color);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.acceptBtn:hover {
+  background: var(--faction-color);
+  color: var(--bg-deep);
+}
+
+.retakeBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.1s;
+}
+
+.retakeBtn:hover {
+  color: var(--text-primary);
+}

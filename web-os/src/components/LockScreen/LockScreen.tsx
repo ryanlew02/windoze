@@ -1,0 +1,67 @@
+import { useEffect, useRef, useState } from 'react';
+import { useLockStore } from '../../store/useLockStore';
+import styles from './LockScreen.module.css';
+
+export function LockScreen() {
+  const { unlock, checkPassword } = useLockStore();
+  const [input, setInput]         = useState('');
+  const [error, setError]         = useState(false);
+  const [exiting, setExiting]     = useState(false);
+  const [time, setTime]           = useState(new Date());
+  const inputRef                  = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    const id = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (checkPassword(input)) {
+      setExiting(true);
+      setTimeout(unlock, 600);
+    } else {
+      setError(true);
+      setInput('');
+      setTimeout(() => setError(false), 600);
+    }
+  }
+
+  return (
+    <div className={`${styles.screen} ${exiting ? styles.exit : ''}`}>
+      <div className={styles.bg} />
+
+      <div className={styles.panel}>
+        <div className={styles.clock}>
+          {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </div>
+        <div className={styles.date}>
+          {time.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
+        </div>
+
+        <div className={styles.divider} />
+
+        <p className={styles.label}>FACTION ACCESS TERMINAL</p>
+        <p className={styles.sublabel}>Enter access code to continue</p>
+
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <input
+            ref={inputRef}
+            type="password"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className={`${styles.input} ${error ? styles.shake : ''}`}
+            placeholder="access code"
+            autoComplete="off"
+            spellCheck={false}
+          />
+          {error && <p className={styles.error}>ACCESS DENIED</p>}
+          <button type="submit" className={styles.btn}>AUTHENTICATE</button>
+        </form>
+
+        <p className={styles.hint}>Default code: insurgent</p>
+      </div>
+    </div>
+  );
+}

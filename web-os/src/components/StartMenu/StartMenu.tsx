@@ -1,5 +1,6 @@
 import { useAppStore } from '../../store/useAppStore';
 import { useWindowStore } from '../../store/useWindowStore';
+import { useLockStore } from '../../store/useLockStore';
 import styles from './StartMenu.module.css';
 
 interface Props {
@@ -28,6 +29,8 @@ export function StartMenu({ onClose }: Props) {
     onClose();
   }
 
+  const lock = useLockStore((s) => s.lock);
+
   return (
     <div className={styles.menu}>
       <div className={styles.header}>
@@ -42,6 +45,7 @@ export function StartMenu({ onClose }: Props) {
         ))}
       </div>
       <div className={styles.footer}>
+        <button className={styles.footerBtn} onClick={() => { lock(); onClose(); }}>🔒 Lock</button>
         <button className={styles.footerBtn} title="Power">⏻ Shut down</button>
       </div>
     </div>

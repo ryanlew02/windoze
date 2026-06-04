@@ -6,12 +6,16 @@
   overflow: hidden;
 }
 
-.icons {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 4px;
-  padding: 16px 8px;
-  align-content: flex-start;
-  height: 100%;
+.iconWrapper {
+  position: absolute;
+  user-select: none;
+}
+
+.marquee {
+  position: absolute;
+  border: 1px solid var(--accent);
+  background: var(--accent-dim);
+  pointer-events: none;
+  z-index: 999;
+  border-radius: 2px;
 }
