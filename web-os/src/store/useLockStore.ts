@@ -9,6 +9,7 @@ interface LockStore {
   unlock: () => void;
   checkPassword: (input: string) => boolean;
   changePassword: (current: string, next: string) => boolean;
+  resetPassword: () => void;
 }
 
 export const useLockStore = create<LockStore>(() => ({
@@ -21,4 +22,5 @@ export const useLockStore = create<LockStore>(() => ({
     localStorage.setItem('os-password', next);
     return true;
   },
+  resetPassword: () => localStorage.removeItem('os-password'),
 }));

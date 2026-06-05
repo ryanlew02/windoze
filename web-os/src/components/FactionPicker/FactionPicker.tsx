@@ -31,7 +31,7 @@ export function FactionPicker() {
               onClick={() => { setFaction(f.id); setOpen(false); }}
             >
               <span className={styles.swatch} style={{ background: f.color }} />
-              <span className={styles.symbol}>{f.symbol}</span>
+              <span className={styles.symbol} style={{ filter: `drop-shadow(0 0 6px ${f.color})` }}>{f.symbol}</span>
               <span className={styles.name}>{f.name}</span>
             </button>
           ))}
@@ -41,7 +41,7 @@ export function FactionPicker() {
         className={`${styles.btn} ${open ? styles.btnOpen : ''}`}
         onClick={() => setOpen((v) => !v)}
       >
-        <span className={styles.btnSymbol}>{current.symbol}</span>
+        <span className={styles.btnSymbol} style={{ filter: `drop-shadow(0 0 8px ${current.color})` }}>{current.symbol}</span>
         <span className={styles.btnName}>{current.name}</span>
       </button>
     </div>

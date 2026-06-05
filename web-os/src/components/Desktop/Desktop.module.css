@@ -75,7 +75,9 @@
 }
 
 .menuItem {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding: 6px 12px;
   text-align: left;
@@ -85,8 +87,46 @@
   color: var(--text-primary);
   font-size: 13px;
   cursor: pointer;
+  gap: 8px;
 }
 
 .menuItem:hover {
   background: var(--hover-overlay-strong);
+}
+
+.menuItemActive {
+  color: var(--accent);
+}
+
+.menuDivider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
+}
+
+.menuArrow {
+  font-size: 9px;
+  opacity: 0.6;
+}
+
+.menuCheck {
+  color: var(--accent);
+  font-size: 11px;
+}
+
+.submenuWrapper {
+  position: relative;
+}
+
+.submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  min-width: 120px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  z-index: 10000;
 }

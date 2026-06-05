@@ -14,6 +14,7 @@ interface DesktopItemState {
   removeItem: (id: string) => void;
   renameItem: (id: string, name: string) => void;
   moveItem: (id: string, x: number, y: number) => void;
+  reset: () => void;
 }
 
 export const useDesktopItemStore = create<DesktopItemState>((set) => ({
@@ -26,4 +27,5 @@ export const useDesktopItemStore = create<DesktopItemState>((set) => ({
     set((s) => ({ items: s.items.map((i) => (i.id === id ? { ...i, name } : i)) })),
   moveItem: (id, x, y) =>
     set((s) => ({ items: s.items.map((i) => (i.id === id ? { ...i, x, y } : i)) })),
+  reset: () => set({ items: [] }),
 }));

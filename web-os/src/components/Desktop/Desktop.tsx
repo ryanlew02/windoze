@@ -4,6 +4,7 @@ import { useWindowStore } from '../../store/useWindowStore';
 import { useIconStore } from '../../store/useIconStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useDesktopItemStore, type DesktopItem } from '../../store/useDesktopItemStore';
+import { useViewStore, VIEW_CONFIG, type ViewScale } from '../../store/useViewStore';
 import { useDraggable } from '../../hooks/useDraggable';
 import { AppIcon } from '../AppIcon/AppIcon';
 import { Window } from '../Window/Window';
@@ -16,10 +17,8 @@ import candorBg     from '../../assets/candor_bg.png';
 import divergentBg  from '../../assets/divergent_bg.png';
 import styles from './Desktop.module.css';
 
-const GRID   = 96;
-const ICON_W = 80;
-const ICON_H = 80;
-const snap   = (v: number) => Math.round(v / GRID) * GRID;
+const COLS         = 2;
+const DEFAULT_GRID = 96; // default positions are always in normal-scale pixels
 
 const factionBg: Record<string, string> = {
   dauntless: dauntlessBg, erudite: eruditeBg, amity: amityBg,
@@ -30,10 +29,6 @@ interface Rect { x: number; y: number; w: number; h: number }
 
 function normalizeRect(ax: number, ay: number, bx: number, by: number): Rect {
   return { x: Math.min(ax, bx), y: Math.min(ay, by), w: Math.abs(bx - ax), h: Math.abs(by - ay) };
-}
-
-function rectsIntersect(ix: number, iy: number, rx: number, ry: number, rw: number, rh: number) {
-  return ix < rx + rw && ix + ICON_W > rx && iy < ry + rh && iy + ICON_H > ry;
 }
 
 type DesktopCtxMenu = { x: number; y: number };
@@ -152,28 +147,45 @@ function DraggableDesktopItem({
 
 // --- Desktop ---
 
+const VIEW_LABELS: Record<ViewScale, string> = {
+  small:  'Small',
+  normal: 'Normal',
+  large:  'Large',
+};
+
 export function Desktop() {
   const apps                              = useAppStore((s) => s.apps);
   const { windows, openWindow }          = useWindowStore();
   const { positions, labels, setPosition, setLabel } = useIconStore();
   const factionId                         = useThemeStore((s) => s.factionId);
   const { items: desktopItems, addItem, removeItem, renameItem, moveItem } = useDesktopItemStore();
+  const { scale, setScale }               = useViewStore();
+
+  const { iconW: ICON_W, iconH: ICON_H, windowScale } = VIEW_CONFIG[scale];
+  const snap = (v: number) => Math.round(v / DEFAULT_GRID) * DEFAULT_GRID;
 
   const [selectedIds, setSelectedIds]   = useState<Set<string>>(new Set());
   const [marquee, setMarquee]           = useState<Rect | null>(null);
   const [desktopMenu, setDesktopMenu]   = useState<DesktopCtxMenu | null>(null);
   const [iconMenu, setIconMenu]         = useState<IconCtxMenu | null>(null);
   const [renaming, setRenaming]         = useState<Renaming | null>(null);
+  const [viewSubmenuOpen, setViewSubmenuOpen] = useState(false);
 
-  const desktopRef  = useRef<HTMLDivElement>(null);
+  const desktopRef   = useRef<HTMLDivElement>(null);
   const marqueeStart = useRef<{ x: number; y: number } | null>(null);
-  const renameRef   = useRef<HTMLInputElement>(null);
+  const renameRef    = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (renaming) renameRef.current?.focus();
   }, [renaming]);
 
-  function closeMenus() { setDesktopMenu(null); setIconMenu(null); }
+  function closeMenus() {
+    setDesktopMenu(null);
+    setIconMenu(null);
+    setViewSubmenuOpen(false);
+  }
+
+  const cssZoom = () => parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
 
   const launch = useCallback(
     (appId: string) => {
@@ -186,34 +198,48 @@ export function Desktop() {
         icon: app.icon,
         x: 100 + Math.random() * 120,
         y: 60 + Math.random() * 80,
-        width: app.defaultWidth ?? 520,
-        height: app.defaultHeight ?? 400,
+        width:  (app.defaultWidth  ?? 520) * windowScale,
+        height: (app.defaultHeight ?? 400) * windowScale,
         isMinimized: false,
         isMaximized: false,
       });
     },
-    [apps, openWindow],
+    [apps, openWindow, windowScale],
   );
 
   function getPos(appId: string, index: number) {
-    return positions[appId] ?? { x: 0, y: index * GRID };
+    return positions[appId] ?? { x: (index % COLS) * DEFAULT_GRID, y: Math.floor(index / COLS) * DEFAULT_GRID };
+  }
+
+  function snapPos(x: number, y: number) {
+    const w = desktopRef.current?.clientWidth  ?? Infinity;
+    const h = desktopRef.current?.clientHeight ?? Infinity;
+    return {
+      x: Math.max(0, Math.min(snap(x), w - ICON_W)),
+      y: Math.max(0, Math.min(snap(y), h - ICON_H)),
+    };
+  }
+
+  function rectsIntersect(ix: number, iy: number, rx: number, ry: number, rw: number, rh: number) {
+    return ix < rx + rw && ix + ICON_W > rx && iy < ry + rh && iy + ICON_H > ry;
   }
 
   function handleDesktopMouseDown(e: React.MouseEvent<HTMLDivElement>) {
     if (e.button !== 0) return;
     if (e.target !== e.currentTarget) return;
     closeMenus();
+    const z = cssZoom();
     const bounds = desktopRef.current!.getBoundingClientRect();
-    const sx = e.clientX - bounds.left;
-    const sy = e.clientY - bounds.top;
+    const sx = (e.clientX - bounds.left) / z;
+    const sy = (e.clientY - bounds.top) / z;
     marqueeStart.current = { x: sx, y: sy };
     setSelectedIds(new Set());
     setMarquee(null);
 
     function onMouseMove(ev: MouseEvent) {
       const start = marqueeStart.current!;
-      const ex = ev.clientX - bounds.left;
-      const ey = ev.clientY - bounds.top;
+      const ex = (ev.clientX - bounds.left) / z;
+      const ey = (ev.clientY - bounds.top) / z;
       const rect = normalizeRect(start.x, start.y, ex, ey);
       setMarquee(rect);
       const hit = new Set(
@@ -243,12 +269,14 @@ export function Desktop() {
     e.preventDefault();
     closeMenus();
     setRenaming(null);
-    setDesktopMenu({ x: e.clientX, y: e.clientY });
+    const z = cssZoom();
+    setDesktopMenu({ x: e.clientX / z, y: e.clientY / z });
   }
 
   function handleIconContextMenu(e: React.MouseEvent, id: string, kind: 'app' | 'item', currentName: string) {
     closeMenus();
-    setIconMenu({ x: e.clientX, y: e.clientY, id, kind, currentName });
+    const z = cssZoom();
+    setIconMenu({ x: e.clientX / z, y: e.clientY / z, id, kind, currentName });
   }
 
   function startRename(id: string, kind: 'app' | 'item', currentName: string) {
@@ -275,8 +303,6 @@ export function Desktop() {
     const y = snap(desktopMenu.y);
     addItem(name, type, x, y);
     closeMenus();
-    // immediately enter rename for the new item — find it after state settles
-    // we'll trigger by matching the next item's id via a brief timeout
     setTimeout(() => {
       const { items } = useDesktopItemStore.getState();
       const last = items[items.length - 1];
@@ -309,7 +335,12 @@ export function Desktop() {
             const p = getPos(id, i);
             const tx = p.x + dx;
             const ty = p.y + dy;
-            setPosition(id, finalSnap ? snap(tx) : tx, finalSnap ? snap(ty) : ty);
+            if (finalSnap) {
+              const { x: sx, y: sy } = snapPos(tx, ty);
+              setPosition(id, sx, sy);
+            } else {
+              setPosition(id, tx, ty);
+            }
           });
         }
 
@@ -325,7 +356,7 @@ export function Desktop() {
             renameValue={isRenaming ? renaming!.value : ''}
             renameRef={renameRef}
             onMove={(x, y) => isGroupDrag ? moveGroup(x, y, false) : setPosition(app.id, x, y)}
-            onDrop={(x, y) => isGroupDrag ? moveGroup(x, y, true)  : setPosition(app.id, snap(x), snap(y))}
+            onDrop={(x, y) => { if (isGroupDrag) { moveGroup(x, y, true); } else { const p = snapPos(x, y); setPosition(app.id, p.x, p.y); } }}
             onSelect={() => setSelectedIds(new Set([app.id]))}
             onLaunch={() => launch(app.id)}
             onContextMenu={(e) => handleIconContextMenu(e, app.id, 'app', label)}
@@ -346,7 +377,7 @@ export function Desktop() {
             renameValue={isRenaming ? renaming!.value : ''}
             renameRef={renameRef}
             onMove={(x, y) => moveItem(item.id, x, y)}
-            onDrop={(x, y) => moveItem(item.id, snap(x), snap(y))}
+            onDrop={(x, y) => { const p = snapPos(x, y); moveItem(item.id, p.x, p.y); }}
             onContextMenu={(e) => handleIconContextMenu(e, item.id, 'item', item.name)}
             onRenameChange={(v) => setRenaming((r) => r ? { ...r, value: v } : null)}
             onRenameConfirm={confirmRename}
@@ -381,6 +412,31 @@ export function Desktop() {
         >
           <button className={styles.menuItem} onClick={() => createDesktopItem('folder')}>📁 New Folder</button>
           <button className={styles.menuItem} onClick={() => createDesktopItem('file')}>📄 New File</button>
+          <div className={styles.menuDivider} />
+          <div
+            className={styles.submenuWrapper}
+            onMouseEnter={() => setViewSubmenuOpen(true)}
+            onMouseLeave={() => setViewSubmenuOpen(false)}
+          >
+            <button className={styles.menuItem}>
+              <span>View</span>
+              <span className={styles.menuArrow}>▶</span>
+            </button>
+            {viewSubmenuOpen && (
+              <div className={styles.submenu}>
+                {(['small', 'normal', 'large'] as ViewScale[]).map((s) => (
+                  <button
+                    key={s}
+                    className={`${styles.menuItem} ${scale === s ? styles.menuItemActive : ''}`}
+                    onClick={() => { setScale(s); closeMenus(); }}
+                  >
+                    {VIEW_LABELS[s]}
+                    {scale === s && <span className={styles.menuCheck}>✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 

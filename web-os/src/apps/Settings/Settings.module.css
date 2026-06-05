@@ -158,6 +158,39 @@
   color: var(--bg-deep);
 }
 
+.btnDanger {
+  margin-top: 4px;
+  padding: 9px 20px;
+  border: 1px solid var(--close-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--close-color);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btnDanger:hover {
+  background: var(--close-color);
+  color: var(--bg-deep);
+}
+
+.btnDangerConfirm {
+  margin-top: 4px;
+  padding: 9px 20px;
+  border: 1px solid var(--close-color);
+  border-radius: 6px;
+  background: var(--close-color);
+  color: var(--bg-deep);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s, color 0.15s;
+}
+
 /* ── Theme grid ── */
 
 .themeGrid {
@@ -199,6 +232,8 @@
 .themeSymbol {
   font-size: clamp(14px, 22cqw, 30px);
   line-height: 1;
+  color: var(--f-color);
+  filter: drop-shadow(0 0 6px var(--f-color));
 }
 
 .themeName {
@@ -216,7 +251,68 @@
   font-size: clamp(8px, 9cqw, 13px);
   color: var(--f-color);
   font-weight: 700;
+  filter: drop-shadow(0 0 6px var(--f-color));
 }
+
+/* ── View scale ── */
+
+.viewGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.viewCard {
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-base);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  min-width: 0;
+  overflow: hidden;
+  width: 100%;
+}
+
+.viewCard:hover {
+  border-color: var(--accent);
+  background: var(--hover-overlay);
+}
+
+.viewActive {
+  border-color: var(--accent) !important;
+  background: var(--accent-dim) !important;
+  box-shadow: inset 0 -3px 0 var(--accent);
+}
+
+.viewZoom {
+  font-size: clamp(11px, 14cqw, 20px);
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.viewLabel {
+  font-size: clamp(9px, 9cqw, 13px);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.viewDesc {
+  font-size: clamp(8px, 7cqw, 11px);
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.4;
+  word-break: break-word;
+  width: 100%;
+}
+
 
 /* ── Hint ── */
 

@@ -1,16 +1,39 @@
 import { useState } from 'react';
 import { useLockStore } from '../../store/useLockStore';
 import { useThemeStore } from '../../store/useThemeStore';
+import { useViewStore, VIEW_CONFIG, type ViewScale } from '../../store/useViewStore';
+import { useIconStore } from '../../store/useIconStore';
+import { useDesktopItemStore } from '../../store/useDesktopItemStore';
 import { factions } from '../../themes/factions';
 import styles from './Settings.module.css';
 
-type Section = 'security' | 'appearance';
+type Section = 'security' | 'appearance' | 'display' | 'reset';
+
+const VIEW_OPTIONS: { scale: ViewScale; label: string; description: string }[] = [
+  { scale: 'small',  label: 'Small',  description: 'Compact icons and windows' },
+  { scale: 'normal', label: 'Normal', description: 'Default size (recommended)' },
+  { scale: 'large',  label: 'Large',  description: 'Bigger icons and windows'   },
+];
 
 export function SettingsApp() {
   const [section, setSection] = useState<Section>('security');
 
   const changePassword                  = useLockStore((s) => s.changePassword);
   const { factionId, setFaction }       = useThemeStore();
+  const { scale, setScale }             = useViewStore();
+  const resetIcons                      = useIconStore((s) => s.reset);
+  const resetDesktopItems               = useDesktopItemStore((s) => s.reset);
+  const { resetPassword, lock }         = useLockStore();
+  const [resetConfirm, setResetConfirm] = useState(false);
+
+  function handleFactoryReset() {
+    if (!resetConfirm) { setResetConfirm(true); return; }
+    resetIcons();
+    resetDesktopItems();
+    resetPassword();
+    lock();
+    setResetConfirm(false);
+  }
 
   const [current, setCurrent]   = useState('');
   const [next, setNext]         = useState('');
@@ -27,7 +50,7 @@ export function SettingsApp() {
       setCurrent(''); setNext(''); setConfirm('');
     } else {
       setStatus('wrong');
-      setCurrent('');
+      setCurrent(''); setNext(''); setConfirm('');
     }
     setTimeout(() => setStatus('idle'), 3000);
   }
@@ -54,6 +77,18 @@ export function SettingsApp() {
           onClick={() => setSection('appearance')}
         >
           <span>🎨</span> Appearance
+        </button>
+        <button
+          className={`${styles.navItem} ${section === 'display' ? styles.navActive : ''}`}
+          onClick={() => setSection('display')}
+        >
+          <span>🔍</span> Display
+        </button>
+        <button
+          className={`${styles.navItem} ${section === 'reset' ? styles.navActive : ''}`}
+          onClick={() => setSection('reset')}
+        >
+          <span>⚠️</span> Reset
         </button>
       </div>
 
@@ -142,6 +177,66 @@ export function SettingsApp() {
                     {f.id === factionId && <span className={styles.themeCheck}>✓</span>}
                   </button>
                 ))}
+              </div>
+            </div>
+
+          </>
+        )}
+
+        {section === 'reset' && (
+          <>
+            <h2 className={styles.sectionTitle}>Reset</h2>
+
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <span className={styles.cardIcon}>⚠️</span>
+                <div>
+                  <p className={styles.cardTitle}>Factory Data Reset</p>
+                  <p className={styles.cardSub}>
+                    Resets all icon positions, labels, and desktop items. Restores the access
+                    code to <code className={styles.code}>insurgent</code> and locks the screen.
+                  </p>
+                </div>
+              </div>
+              <button
+                className={resetConfirm ? styles.btnDangerConfirm : styles.btnDanger}
+                onClick={handleFactoryReset}
+                onBlur={() => setResetConfirm(false)}
+              >
+                {resetConfirm ? 'Click again to confirm' : 'Factory Data Reset'}
+              </button>
+            </div>
+          </>
+        )}
+
+        {section === 'display' && (
+          <>
+            <h2 className={styles.sectionTitle}>Display</h2>
+
+            <div className={styles.card}>
+              <div className={styles.cardHeader}>
+                <span className={styles.cardIcon}>🔍</span>
+                <div>
+                  <p className={styles.cardTitle}>View Scale</p>
+                  <p className={styles.cardSub}>Adjusts icon size, grid spacing, and default window size.</p>
+                </div>
+              </div>
+
+              <div className={styles.viewGrid}>
+                {VIEW_OPTIONS.map(({ scale: s, label, description }) => {
+                  const cfg = VIEW_CONFIG[s];
+                  return (
+                    <button
+                      key={s}
+                      className={`${styles.viewCard} ${scale === s ? styles.viewActive : ''}`}
+                      onClick={() => setScale(s)}
+                    >
+                      <span className={styles.viewZoom}>{Math.round(cfg.zoom * 100)}%</span>
+                      <span className={styles.viewLabel}>{label}</span>
+                      <span className={styles.viewDesc}>{description}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </>

@@ -18,6 +18,17 @@ export default function App() {
     });
   }, [factionId]);
 
+  useEffect(() => {
+    function clearSelection(e: MouseEvent) {
+      const tag = (e.target as HTMLElement).tagName;
+      if (tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        window.getSelection()?.removeAllRanges();
+      }
+    }
+    document.addEventListener('mousedown', clearSelection);
+    return () => document.removeEventListener('mousedown', clearSelection);
+  }, []);
+
   return (
     <>
       <Desktop />
