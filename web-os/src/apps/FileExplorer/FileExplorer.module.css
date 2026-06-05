@@ -82,3 +82,51 @@
   font-size: 13px;
   padding: 20px;
 }
+
+.spacer {
+  flex: 1;
+}
+
+.itemEditing {
+  cursor: default;
+}
+
+.nameInput {
+  width: 100%;
+  background: var(--bg-overlay);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--text-primary);
+  font-size: 11px;
+  padding: 2px 4px;
+  outline: none;
+  text-align: center;
+}
+
+.contextMenu {
+  position: fixed;
+  z-index: 9999;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px;
+  min-width: 120px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  padding: 6px 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: var(--hover-overlay-strong);
+}

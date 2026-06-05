@@ -8,6 +8,7 @@ export function LockScreen() {
   const [error, setError]         = useState(false);
   const [exiting, setExiting]     = useState(false);
   const [time, setTime]           = useState(new Date());
+  const [showReset, setShowReset] = useState(false);
   const inputRef                  = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function LockScreen() {
 
         <p className={styles.label}>FACTION ACCESS TERMINAL</p>
         <p className={styles.sublabel}>Enter access code to continue</p>
+        <p className={styles.hint}>Default code: insurgent</p>
 
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
@@ -60,7 +62,27 @@ export function LockScreen() {
           <button type="submit" className={styles.btn}>AUTHENTICATE</button>
         </form>
 
-        <p className={styles.hint}>Default code: insurgent</p>
+        <button
+          className={styles.forgotBtn}
+          onClick={() => setShowReset((v) => !v)}
+        >
+          {showReset ? 'hide' : 'Forgot code?'}
+        </button>
+
+        {showReset && (
+          <div className={styles.resetBox}>
+            <p className={styles.resetTitle}>RESET TO DEFAULT</p>
+            <ol className={styles.resetSteps}>
+              <li>Press <kbd className={styles.kbd}>F12</kbd> to open DevTools</li>
+              <li>Go to the <strong>Console</strong> tab</li>
+              <li>Paste and run:<br />
+                <code className={styles.code}>localStorage.removeItem('os-password')</code>
+              </li>
+              <li>Refresh the page <kbd className={styles.kbd}>F5</kbd></li>
+              <li>Default code is <strong>insurgent</strong></li>
+            </ol>
+          </div>
+        )}
       </div>
     </div>
   );

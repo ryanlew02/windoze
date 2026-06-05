@@ -3,6 +3,8 @@ export interface AppDefinition {
   title: string;
   icon: string;
   component: React.ComponentType;
+  defaultWidth?: number;
+  defaultHeight?: number;
 }
 
 export interface WindowState {

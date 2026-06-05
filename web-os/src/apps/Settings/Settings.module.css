@@ -221,14 +221,15 @@
 /* ── Hint ── */
 
 .hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
   font-size: 12px;
   color: var(--text-muted);
+  line-height: 1.6;
 }
 
-.hintIcon { font-size: 14px; }
+.hintIcon {
+  font-size: 13px;
+  margin-right: 4px;
+}
 
 .code {
   font-family: 'Consolas', 'Monaco', monospace;

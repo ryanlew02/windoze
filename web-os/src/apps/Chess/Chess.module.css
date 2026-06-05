@@ -1,0 +1,419 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+/* ── status bar ── */
+
+.statusBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  height: 38px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.turnLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.checkBadge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--bg-deep);
+  background: var(--close-color);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+
+.newGameBtn {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.newGameBtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── mode + difficulty controls ── */
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 14px;
+  flex-shrink: 0;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.controlGroup {
+  display: flex;
+  gap: 3px;
+  transition: opacity 0.2s;
+}
+
+.dimmed { opacity: 0.35; pointer-events: none; }
+
+.modeBtn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.modeBtn:hover { color: var(--text-primary); border-color: var(--border-focused); }
+
+.modeBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.diffBtn {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  transition: all 0.15s;
+}
+
+.diffBtn:hover { color: var(--text-primary); border-color: var(--border-focused); }
+
+.diffBtnActive {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── board area ── */
+
+.boardArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  min-height: 0;
+  position: relative;
+}
+
+/* Original working layout: flex row, height fills boardArea */
+.boardWrap {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  height: 100%;
+}
+
+/*
+ * Rank labels must align with the BOARD portion of .inner, not the player bars
+ * or file row that also live inside .inner.
+ *
+ * .inner layout (flex col, gap 4px):
+ *   playerBar black  → 20px  (flex-shrink: 0)
+ *   gap              → 4px
+ *   .board           → flex: 1
+ *   gap              → 4px
+ *   .files           → 16px  (flex-shrink: 0)
+ *   gap              → 4px
+ *   playerBar white  → 20px  (flex-shrink: 0)
+ *
+ * Top of board inside inner: 20 + 4 = 24px
+ * Below board inside inner:  4 + 16 + 4 + 20 = 44px
+ * So ranks: margin-top 24px, height calc(100% - 24px - 44px) = calc(100% - 68px)
+ */
+.ranks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 24px;
+  height: calc(100% - 68px);
+  padding-bottom: 2px;
+}
+
+.rankLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 10px;
+  text-align: center;
+  line-height: 1;
+}
+
+/*
+ * Square container — same as the original working .inner.
+ * Player bars + board + files all live inside here.
+ * aspect-ratio: 1 keeps the whole column square.
+ * container-type: size drives 10cqmin piece sizing.
+ */
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  height: 100%;
+  aspect-ratio: 1;
+  container-type: size;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  flex: 1;
+  border: 2px solid var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.files {
+  display: flex;
+  justify-content: space-around;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.fileLabel {
+  font-size: 10px;
+  color: var(--text-muted);
+  width: 10px;
+  text-align: center;
+}
+
+/* ── player bars (inside .inner, above and below .board) ── */
+
+.playerBar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.capturedPieces {
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.capturedPiece {
+  font-size: 12px;
+  line-height: 1;
+  opacity: 0.7;
+  letter-spacing: -2px;
+}
+
+.advantageLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  padding-left: 4px;
+}
+
+/* ── squares ── */
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter 0.1s;
+}
+
+.square:hover { filter: brightness(1.1); }
+
+.light { background: #f0d9b5; }
+.dark  { background: #b58863; }
+
+.selected {
+  background: rgba(20, 85, 30, 0.5) !important;
+  box-shadow: inset 0 0 0 3px rgba(20, 85, 30, 0.85);
+}
+
+/* legal move on empty square — dot */
+.legalDot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+/* legal capture — ring */
+.legalRing::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgba(0, 0, 0, 0.22);
+  pointer-events: none;
+}
+
+.inCheck {
+  background: rgba(200, 30, 30, 0.6) !important;
+  box-shadow: inset 0 0 0 3px rgba(200, 30, 30, 0.9);
+}
+
+/* ── pieces ── */
+
+.piece {
+  position: relative;
+  z-index: 1;
+  font-size: 10cqmin;
+  line-height: 1;
+  user-select: none;
+}
+
+.wp { color: #fff;    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.9)); }
+.bp { color: #1a1a1a; filter: drop-shadow(0 1px 1px rgba(255,255,255,0.15)); }
+
+/* ── promotion picker ── */
+
+.promoOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  backdrop-filter: blur(3px);
+}
+
+.promoBox {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+.promoLabel {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.promoChoices {
+  display: flex;
+  gap: 8px;
+}
+
+.promoBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--bg-overlay);
+  cursor: pointer;
+  font-size: 28px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.promoBtn:hover {
+  border-color: var(--accent);
+  background: var(--hover-overlay-strong);
+}
+
+.promoBtnLabel {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* ── game over overlay ── */
+
+.gameOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.overlayTitle {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--text-primary);
+}
+
+.overlaySub {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+.overlayBtn {
+  padding: 10px 28px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.overlayBtn:hover {
+  background: var(--accent);
+  color: var(--bg-deep);
+}
