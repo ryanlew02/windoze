@@ -227,11 +227,8 @@ export function applyMove(
   if (to[0] === 0 && to[1] === 0) c.bQ = false;
 
   // threefold-repetition tracking
-  const key      = positionKey(newBoard, newTurn, c, newEP);
-  const count    = (state.posHistory[key] ?? 0) + 1;
-  const newPosHistory = count === (state.posHistory[key] ?? 0) + 1
-    ? { ...state.posHistory, [key]: count }
-    : state.posHistory;
+  const key   = positionKey(newBoard, newTurn, c, newEP);
+  const count = (state.posHistory[key] ?? 0) + 1;
 
   const nextState: GameState = {
     board: newBoard, turn: newTurn, castling: c,
