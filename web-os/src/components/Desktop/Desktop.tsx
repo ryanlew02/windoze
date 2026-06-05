@@ -2,10 +2,26 @@ import { useCallback, useRef, useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { useWindowStore } from '../../store/useWindowStore';
 import { useIconStore } from '../../store/useIconStore';
+import { useThemeStore } from '../../store/useThemeStore';
 import { useDraggable } from '../../hooks/useDraggable';
 import { AppIcon } from '../AppIcon/AppIcon';
 import { Window } from '../Window/Window';
 import type { AppDefinition } from '../../types/index';
+import dauntlessBg    from '../../assets/dauntless_bg.png';
+import eruditeBg      from '../../assets/erudite_bg.png';
+import amityBg        from '../../assets/amity_bg.png';
+import abnegationBg   from '../../assets/abnegation_bg.png';
+import candorBg       from '../../assets/candor_bg.png';
+import divergentBg    from '../../assets/divergent_bg.png';
+
+const factionBg: Record<string, string> = {
+  dauntless:  dauntlessBg,
+  erudite:    eruditeBg,
+  amity:      amityBg,
+  abnegation: abnegationBg,
+  candor:     candorBg,
+  divergent:  divergentBg,
+};
 import styles from './Desktop.module.css';
 
 const GRID    = 96;
@@ -52,6 +68,7 @@ export function Desktop() {
   const apps                    = useAppStore((s) => s.apps);
   const { windows, openWindow } = useWindowStore();
   const { positions, setPosition } = useIconStore();
+  const factionId               = useThemeStore((s) => s.factionId);
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [marquee, setMarquee]         = useState<Rect | null>(null);
@@ -120,10 +137,13 @@ export function Desktop() {
     window.addEventListener('mouseup', onMouseUp);
   }
 
+  const bgImage = `url(${factionBg[factionId] ?? '/src/assets/chicagobackground.avif'})`;
+
   return (
     <div
       ref={desktopRef}
       className={styles.desktop}
+      style={{ backgroundImage: bgImage }}
       onMouseDown={handleDesktopMouseDown}
     >
       {apps.map((app, index) => {

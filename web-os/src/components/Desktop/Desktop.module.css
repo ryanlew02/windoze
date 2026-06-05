@@ -2,7 +2,9 @@
   position: fixed;
   inset: 0;
   bottom: 44px;
-  background: url('/src/assets/chicagobackground.avif') center/cover no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   overflow: hidden;
 }
 
