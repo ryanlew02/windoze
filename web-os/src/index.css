@@ -24,6 +24,10 @@
   box-sizing: border-box;
 }
 
+html {
+  zoom: 1.25;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
