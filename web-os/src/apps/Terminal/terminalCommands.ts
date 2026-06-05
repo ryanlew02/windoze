@@ -207,7 +207,7 @@ function cmdRmdir(root: Record<string, FsNode>, cwd: string[], args: string[], a
   return { lines: [] };
 }
 
-function cmdEcho(root: Record<string, FsNode>, cwd: string[], args: string[], actions: FsActions): CmdResult {
+function cmdEcho(_root: Record<string, FsNode>, cwd: string[], args: string[], actions: FsActions): CmdResult {
   // Detect redirect:  echo some text > filename
   const redirectIdx = args.indexOf('>');
 

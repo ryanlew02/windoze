@@ -62,7 +62,7 @@ export function TerminalApp() {
   const [input,   setInput]   = useState('');
   const [cwd,     setCwd]     = useState<string[]>([]);
   const [history, setHistory] = useState<string[]>([]);
-  const [histIdx, setHistIdx] = useState(-1);
+  const [, setHistIdx] = useState(-1);
 
   const outputRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);

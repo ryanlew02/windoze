@@ -27,9 +27,9 @@ function collectTxtFiles(nodes: Record<string, FsNode>, path: string[] = []): (F
   return out;
 }
 
-function collectFolders(nodes: FsNode[], path: string[] = []): string[][] {
+function collectFolders(nodes: Record<string, FsNode>, path: string[] = []): string[][] {
   const out: string[][] = [path];
-  for (const n of nodes) {
+  for (const n of Object.values(nodes)) {
     if (n.type === 'folder' && n.children) {
       out.push(...collectFolders(n.children, [...path, n.name]));
     }
