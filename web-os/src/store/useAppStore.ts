@@ -8,6 +8,7 @@ import { ManifestoApp } from '../apps/Manifesto/Manifesto';
 import { SettingsApp } from '../apps/Settings/Settings';
 import { FearSimulationApp } from '../apps/FearSimulation/FearSimulation';
 import { ChessApp } from '../apps/Chess/Chess';
+import { TerminalApp } from '../apps/Terminal/Terminal';
 
 interface AppStore {
   apps: AppDefinition[];
@@ -22,6 +23,7 @@ export const useAppStore = create<AppStore>(() => ({
     { id: 'manifesto',     title: 'Manifesto',       icon: '📜', component: ManifestoApp },
     { id: 'settings',      title: 'Settings',        icon: '⚙️', component: SettingsApp },
     { id: 'fear-sim',      title: 'Fear Simulation', icon: '⚡', component: FearSimulationApp },
-    { id: 'chess', title: 'Chess', icon: '♞', component: ChessApp, defaultWidth: 520, defaultHeight: 580 },
+    { id: 'chess',    title: 'Chess',    icon: '♞',  component: ChessApp,    defaultWidth: 520, defaultHeight: 580 },
+    { id: 'terminal', title: 'Terminal', icon: '>_', component: TerminalApp, defaultWidth: 620, defaultHeight: 460 },
   ],
 }));

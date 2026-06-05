@@ -1,5 +1,8 @@
 import { useRef, useCallback } from 'react';
 
+const getCssZoom = () =>
+  parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+
 export function useDraggable(
   onMove: (x: number, y: number) => void,
   onDrop?: (x: number, y: number) => void,
@@ -12,13 +15,15 @@ export function useDraggable(
     (e: React.MouseEvent, currentX: number, currentY: number) => {
       e.preventDefault();
       dragging.current = true;
-      origin.current = { mouseX: e.clientX, mouseY: e.clientY, winX: currentX, winY: currentY };
+      const zoom = getCssZoom();
+      origin.current = { mouseX: e.clientX / zoom, mouseY: e.clientY / zoom, winX: currentX, winY: currentY };
       lastPos.current = { x: currentX, y: currentY };
 
       const onMouseMove = (ev: MouseEvent) => {
         if (!dragging.current) return;
-        const dx = ev.clientX - origin.current.mouseX;
-        const dy = ev.clientY - origin.current.mouseY;
+        const z = getCssZoom();
+        const dx = ev.clientX / z - origin.current.mouseX;
+        const dy = ev.clientY / z - origin.current.mouseY;
         const x = origin.current.winX + dx;
         const y = origin.current.winY + dy;
         lastPos.current = { x, y };

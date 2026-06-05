@@ -2,7 +2,8 @@ export interface AppDefinition {
   id: string;
   title: string;
   icon: string;
-  component: React.ComponentType;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: React.ComponentType<any>;
   defaultWidth?: number;
   defaultHeight?: number;
 }
@@ -20,4 +21,5 @@ export interface WindowState {
   isMaximized: boolean;
   isFocused: boolean;
   zIndex: number;
+  componentProps?: Record<string, unknown>;
 }

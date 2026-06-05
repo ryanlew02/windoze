@@ -2,39 +2,37 @@ import { useEffect, useRef, useState } from 'react';
 import { useFsStore, type FsNode } from '../../store/useFsStore';
 import styles from './FileExplorer.module.css';
 
-type Creating = { type: 'folder' | 'file' };
+type Creating    = { type: 'folder' | 'file' };
 type ContextMenu = { x: number; y: number; node: FsNode };
 
 export function FileExplorerApp() {
   const { root, createNode, deleteNode, renameNode } = useFsStore();
-  const [path, setPath]           = useState<string[]>([]);
-  const [creating, setCreating]   = useState<Creating | null>(null);
-  const [newName, setNewName]     = useState('');
-  const [menu, setMenu]           = useState<ContextMenu | null>(null);
-  const [renaming, setRenaming]   = useState<string | null>(null);
-  const [renameName, setRenameName] = useState('');
+  const [path, setPath]               = useState<string[]>([]);
+  const [creating, setCreating]       = useState<Creating | null>(null);
+  const [newName, setNewName]         = useState('');
+  const [menu, setMenu]               = useState<ContextMenu | null>(null);
+  const [renaming, setRenaming]       = useState<string | null>(null);
+  const [renameName, setRenameName]   = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (creating || renaming) inputRef.current?.focus();
   }, [creating, renaming]);
 
+  /** Walk the Record tree to get the current folder's children as a flat array. */
   function getCurrent(): FsNode[] {
-    let nodes = root;
+    let nodes: Record<string, FsNode> = root;
     for (const seg of path) {
-      const folder = nodes.find((n) => n.name === seg && n.type === 'folder');
-      if (!folder?.children) return [];
-      nodes = folder.children;
+      const node = nodes[seg];
+      if (!node || node.type !== 'folder') return [];
+      nodes = node.children;
     }
-    return nodes;
+    return Object.values(nodes);
   }
 
   function closeMenu() { setMenu(null); }
 
-  function up() {
-    setPath((p) => p.slice(0, -1));
-    closeMenu();
-  }
+  function up() { setPath((p) => p.slice(0, -1)); closeMenu(); }
 
   function startCreate(type: 'folder' | 'file') {
     setCreating({ type });
@@ -84,7 +82,7 @@ export function FileExplorerApp() {
       <div className={styles.fileList}>
         {current.map((node) =>
           renaming === node.name ? (
-            <div key={node.id} className={`${styles.item} ${styles.itemEditing}`}>
+            <div key={node.name} className={`${styles.item} ${styles.itemEditing}`}>
               <span className={styles.itemIcon}>{node.type === 'folder' ? '📁' : '📄'}</span>
               <input
                 ref={inputRef}
@@ -93,7 +91,7 @@ export function FileExplorerApp() {
                 onChange={(e) => setRenameName(e.target.value)}
                 onBlur={confirmRename}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') confirmRename();
+                  if (e.key === 'Enter')  confirmRename();
                   if (e.key === 'Escape') setRenaming(null);
                 }}
                 onClick={(e) => e.stopPropagation()}
@@ -101,7 +99,7 @@ export function FileExplorerApp() {
             </div>
           ) : (
             <button
-              key={node.id}
+              key={node.name}
               className={styles.item}
               onDoubleClick={() => node.type === 'folder' && setPath([...path, node.name])}
               onContextMenu={(e) => handleContextMenu(e, node)}
@@ -123,7 +121,7 @@ export function FileExplorerApp() {
               onChange={(e) => setNewName(e.target.value)}
               onBlur={confirmCreate}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') confirmCreate();
+                if (e.key === 'Enter')  confirmCreate();
                 if (e.key === 'Escape') setCreating(null);
               }}
               onClick={(e) => e.stopPropagation()}

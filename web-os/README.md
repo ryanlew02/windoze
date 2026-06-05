@@ -1,8 +1,8 @@
-# Windoze — Web Desktop OS
+# DivergeOS — Web Desktop OS
 
 A fully functional desktop operating system simulation built in the browser with React and TypeScript. Features a complete window manager, multiple applications, faction-based theming, a lock screen, and a chess engine with four AI difficulty levels.
 
-**Live Demo:** [ryanlew02.github.io/windoze](https://ryanlew02.github.io/windoze/)
+**Live Demo:** [ryanlew02.github.io/DivergeOS](https://ryanlew02.github.io/DivergeOS/)
 
 ---
 

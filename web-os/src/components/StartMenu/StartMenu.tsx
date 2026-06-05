@@ -34,7 +34,7 @@ export function StartMenu({ onClose }: Props) {
   return (
     <div className={styles.menu}>
       <div className={styles.header}>
-        <span className={styles.osName}>Windoze</span>
+        <span className={styles.osName}>DivergeOS</span>
       </div>
       <div className={styles.appList}>
         {apps.map((app) => (
