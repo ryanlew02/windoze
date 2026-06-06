@@ -3,6 +3,7 @@ import { useWindowStore } from '../../store/useWindowStore';
 import { useAppStore } from '../../store/useAppStore';
 import { usePinnedStore } from '../../store/usePinnedStore';
 import { StartMenu } from '../StartMenu/StartMenu';
+import { SearchPanel } from '../SearchPanel/SearchPanel';
 import { FactionPicker } from '../FactionPicker/FactionPicker';
 import styles from './Taskbar.module.css';
 
@@ -15,6 +16,7 @@ interface CtxState {
 
 export function Taskbar() {
   const [startOpen, setStartOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [ctx, setCtx] = useState<CtxState | null>(null);
 
@@ -24,6 +26,7 @@ export function Taskbar() {
   const { pinnedIds, pin, unpin } = usePinnedStore();
 
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const id = setInterval(() => setTime(new Date()), 1000);
@@ -35,10 +38,13 @@ export function Taskbar() {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setStartOpen(false);
       }
+      if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
+        setSearchOpen(false);
+      }
       setCtx(null);
     }
-    document.addEventListener('mousedown', handleMouseDown);
-    return () => document.removeEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousedown', handleMouseDown, true);
+    return () => document.removeEventListener('mousedown', handleMouseDown, true);
   }, []);
 
   function handleTaskClick(winId: string, isMinimized: boolean, isFocused: boolean) {
@@ -84,7 +90,7 @@ export function Taskbar() {
         {startOpen && <StartMenu onClose={() => setStartOpen(false)} />}
         <button
           className={`${styles.startBtn} ${startOpen ? styles.active : ''}`}
-          onClick={() => setStartOpen((v) => !v)}
+          onClick={() => { setStartOpen((v) => !v); setSearchOpen(false); }}
           title="DivergeOS"
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -96,6 +102,20 @@ export function Taskbar() {
               strokeLinecap="round"
               strokeLinejoin="round"
             />
+          </svg>
+        </button>
+      </div>
+
+      <div ref={searchRef} className={styles.searchWrapper}>
+        {searchOpen && <SearchPanel onClose={() => setSearchOpen(false)} />}
+        <button
+          className={`${styles.searchBtn} ${searchOpen ? styles.active : ''}`}
+          onClick={() => { setSearchOpen((v) => !v); setStartOpen(false); }}
+          title="Search"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M11 11 L14.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
       </div>
