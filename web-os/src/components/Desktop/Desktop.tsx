@@ -571,14 +571,15 @@ export function Desktop() {
             renaming={!!isRenaming}
             renameValue={isRenaming ? renaming!.value : ''}
             renameRef={renameRef}
-            onDragStart={() => { preDragPos.current = { x: item.x, y: item.y }; }}
+            onDragStart={() => { preDragPos.current = new Map([[item.id, { x: item.x, y: item.y }]]); }}
             onMove={(x, y) => moveItem(item.id, x, y)}
             onDrop={(x, y) => {
               const p = snapPos(x, y);
               if (!isOccupied(p.x, p.y, item.id)) {
                 moveItem(item.id, p.x, p.y);
               } else {
-                const orig = snapPos(preDragPos.current.x, preDragPos.current.y);
+                const pre = preDragPos.current.get(item.id) ?? { x: item.x, y: item.y };
+                const orig = snapPos(pre.x, pre.y);
                 moveItem(item.id, orig.x, orig.y);
               }
             }}

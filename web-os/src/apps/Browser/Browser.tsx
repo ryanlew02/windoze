@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent } from 'react';
+import { useState, type KeyboardEvent } from 'react';
 import styles from './Browser.module.css';
 
 const DISCLAIMER_KEY = 'browser-disclaimer-dismissed';

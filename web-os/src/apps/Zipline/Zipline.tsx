@@ -171,6 +171,7 @@ export function ZiplineApp() {
     const ctx = canvas.getContext('2d')!;
 
     function resize() {
+      if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
       const w   = canvas.offsetWidth  || 700;
       const h   = canvas.offsetHeight || 500;
@@ -204,8 +205,8 @@ export function ZiplineApp() {
       lastT.current = ts;
 
       const s = gs.current;
-      const w = canvas.offsetWidth;
-      const h = canvas.offsetHeight;
+      const w = canvas!.offsetWidth;
+      const h = canvas!.offsetHeight;
 
       // ── Update ──────────────────────────────────────────────────────────
       if (s.phase === 'playing') {
