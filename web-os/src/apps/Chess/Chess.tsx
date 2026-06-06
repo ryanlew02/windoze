@@ -4,6 +4,7 @@ import {
   type GameState, type PieceType, type Board,
 } from './chessLogic';
 import { getBestMove, type Difficulty } from './chessEngine';
+import { useNotificationStore } from '../../store/useNotificationStore';
 import styles from './Chess.module.css';
 
 const SYMBOLS: Record<'white' | 'black', Record<PieceType, string>> = {
@@ -19,7 +20,6 @@ const DIFFICULTIES: { id: Difficulty; label: string }[] = [
   { id: 'beginner',     label: 'Beginner'     },
   { id: 'intermediate', label: 'Intermediate' },
   { id: 'expert',       label: 'Expert'       },
-  { id: 'impossible',   label: 'Impossible'   },
 ];
 
 // ─── material calculation ────────────────────────────────────────────────────
@@ -98,10 +98,21 @@ export function ChessApp() {
       const move = getBestMove(game, difficulty);
       if (move) setGame(applyMove(game, move.from, move.to));
       setThinking(false);
-    }, difficulty === 'impossible' ? 50 : 300);
+    }, 300);
     return () => { clearTimeout(t); setThinking(false); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game, isAiTurn, difficulty]);
+
+  useEffect(() => {
+    if (game.status === 'checkmate' && winner === 'white') {
+      useNotificationStore.getState().push({
+        icon:    '♔',
+        title:   'PLAYER WINS',
+        message: 'White wins by checkmate.',
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game.status]);
 
   function selectSquare(row: number, col: number) {
     if (over || promo || isAiTurn || thinking) return;

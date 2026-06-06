@@ -466,7 +466,7 @@ export function Desktop() {
           const dx = nx - pos.x;
           const dy = ny - pos.y;
           selectedIds.forEach((id) => {
-            const i = apps.findIndex((a) => a.id === id);
+            const i = sortedApps.findIndex((a) => a.id === id);
             const p = getPos(id, i);
             const tx = p.x + dx;
             const ty = p.y + dy;

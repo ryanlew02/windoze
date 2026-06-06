@@ -1,0 +1,161 @@
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: var(--bg-deep, #04040a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bootIn 0.5s ease forwards;
+}
+
+.exiting {
+  animation: bootOut 0.7s ease forwards;
+}
+
+@keyframes bootIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes bootOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* CRT scanlines */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.07) 2px,
+    rgba(0, 0, 0, 0.07) 4px
+  );
+  pointer-events: none;
+}
+
+/* ── Content ── */
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  max-width: 460px;
+  width: 90%;
+}
+
+.symbol {
+  font-size: 52px;
+  color: var(--accent, #e84830);
+  line-height: 1;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.15s forwards;
+}
+
+.title {
+  margin: 0;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  color: var(--text-primary, #f0ddd0);
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.35s forwards;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 5px;
+  color: var(--accent, #e84830);
+  opacity: 0;
+  animation: fadeIn 0.5s ease 0.65s forwards;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-subtle, rgba(255, 255, 255, 0.08));
+  margin: 2px 0;
+  opacity: 0;
+  animation: fadeIn 0.4s ease 0.85s forwards;
+}
+
+/* ── Log lines ── */
+
+.log {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.logLine {
+  margin: 0;
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--text-muted, #666);
+  letter-spacing: 0.3px;
+  opacity: 0;
+  animation: fadeIn 0.35s ease var(--d) forwards;
+}
+
+.prompt {
+  color: var(--accent, #e84830);
+  margin-right: 8px;
+}
+
+/* ── Progress bar ── */
+
+.progressWrap {
+  width: 100%;
+  height: 2px;
+  background: var(--border-subtle, rgba(255, 255, 255, 0.08));
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+  opacity: 0;
+  animation: fadeIn 0.3s ease 0.9s forwards;
+}
+
+.progressBar {
+  height: 100%;
+  width: 0%;
+  background: var(--accent, #e84830);
+  border-radius: 2px;
+  box-shadow: 0 0 8px var(--accent-glow, rgba(232, 72, 48, 0.5));
+  animation: fillBar 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.9s forwards;
+}
+
+.ready {
+  margin: 0;
+  font-size: 10px;
+  letter-spacing: 2.5px;
+  color: var(--text-primary, #f0ddd0);
+  opacity: 0;
+  animation: fadeIn 0.6s ease 2.9s forwards;
+}
+
+/* ── Keyframes ── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fillBar {
+  0%   { width: 0%;    }
+  60%  { width: 75%;   }
+  85%  { width: 92%;   }
+  100% { width: 100%;  }
+}

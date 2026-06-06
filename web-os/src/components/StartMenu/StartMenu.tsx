@@ -37,7 +37,7 @@ export function StartMenu({ onClose }: Props) {
         <span className={styles.osName}>DivergeOS</span>
       </div>
       <div className={styles.appList}>
-        {apps.map((app) => (
+        {apps.slice(0, 5).map((app) => (
           <button key={app.id} className={styles.appRow} onClick={() => launch(app.id)}>
             <span className={styles.appIcon}>{app.icon}</span>
             <span className={styles.appTitle}>{app.title}</span>

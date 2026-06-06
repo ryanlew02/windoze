@@ -5,6 +5,7 @@ import { usePinnedStore } from '../../store/usePinnedStore';
 import { StartMenu } from '../StartMenu/StartMenu';
 import { SearchPanel } from '../SearchPanel/SearchPanel';
 import { FactionPicker } from '../FactionPicker/FactionPicker';
+import { FactionBroadcast } from '../FactionBroadcast/FactionBroadcast';
 import styles from './Taskbar.module.css';
 
 interface CtxState {
@@ -148,6 +149,8 @@ export function Taskbar() {
           </button>
         ))}
       </div>
+
+      <FactionBroadcast />
 
       <FactionPicker />
 

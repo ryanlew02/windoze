@@ -8,8 +8,15 @@ export function LockScreen() {
   const [error, setError]         = useState(false);
   const [exiting, setExiting]     = useState(false);
   const [time, setTime]           = useState(new Date());
-  const [showReset, setShowReset] = useState(false);
-  const inputRef                  = useRef<HTMLInputElement>(null);
+  const [showReset, setShowReset]           = useState(false);
+  const [factoryConfirm, setFactoryConfirm] = useState(false);
+  const inputRef                            = useRef<HTMLInputElement>(null);
+
+  function handleFactoryReset() {
+    if (!factoryConfirm) { setFactoryConfirm(true); return; }
+    localStorage.clear();
+    location.reload();
+  }
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -71,16 +78,18 @@ export function LockScreen() {
 
         {showReset && (
           <div className={styles.resetBox}>
-            <p className={styles.resetTitle}>RESET TO DEFAULT</p>
-            <ol className={styles.resetSteps}>
-              <li>Press <kbd className={styles.kbd}>F12</kbd> to open DevTools</li>
-              <li>Go to the <strong>Console</strong> tab</li>
-              <li>Paste and run:<br />
-                <code className={styles.code}>localStorage.removeItem('os-password')</code>
-              </li>
-              <li>Refresh the page <kbd className={styles.kbd}>F5</kbd></li>
-              <li>Default code is <strong>insurgent</strong></li>
-            </ol>
+            <p className={styles.resetTitle}>NO ACCESS?</p>
+            <p className={styles.resetDesc}>
+              If you've lost your access code, the only way back in is a factory reset.
+              This will wipe all data and restore the OS to its default state.
+            </p>
+            <button
+              className={`${styles.factoryBtn} ${factoryConfirm ? styles.factoryBtnConfirm : ''}`}
+              onClick={handleFactoryReset}
+              onBlur={() => setFactoryConfirm(false)}
+            >
+              {factoryConfirm ? '⚠ Confirm — this cannot be undone' : 'Factory Reset'}
+            </button>
           </div>
         )}
       </div>
