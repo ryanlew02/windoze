@@ -37,7 +37,7 @@ export function Window({ win, children }: Props) {
 
   return (
     <div
-      className={`${styles.window} ${win.isFocused ? styles.focused : ''}`}
+      className={`${styles.window} ${win.isFocused ? styles.focused : ''} ${win.appId === 'terminal' ? styles.transparent : ''}`}
       style={style}
       onMouseDown={() => focusWindow(win.id)}
     >

@@ -82,6 +82,10 @@
   color: var(--text-primary);
 }
 
+.transparent {
+  background: transparent;
+}
+
 /* ── Resize handles ── */
 
 .handle {

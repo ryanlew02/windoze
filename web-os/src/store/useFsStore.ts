@@ -86,6 +86,22 @@ export const useFsStore = create<FsState>((set) => ({
         'photo.png': { type: 'file', name: 'photo.png', content: '' },
       },
     },
+    Programs: {
+      type: 'folder',
+      name: 'Programs',
+      children: {
+        'Notepad.exe':       { type: 'file', name: 'Notepad.exe',       content: '' },
+        'Calculator.exe':    { type: 'file', name: 'Calculator.exe',    content: '' },
+        'Files.exe':         { type: 'file', name: 'Files.exe',         content: '' },
+        'Terminal.exe':      { type: 'file', name: 'Terminal.exe',      content: '' },
+        'Chess.exe':         { type: 'file', name: 'Chess.exe',         content: '' },
+        'Settings.exe':      { type: 'file', name: 'Settings.exe',      content: '' },
+        'Manifesto.exe':     { type: 'file', name: 'Manifesto.exe',     content: '' },
+        'AptitudeTest.exe':  { type: 'file', name: 'AptitudeTest.exe',  content: '' },
+        'FearSimulation.exe':{ type: 'file', name: 'FearSimulation.exe',content: '' },
+        'Dictionary.exe':    { type: 'file', name: 'Dictionary.exe',    content: '' },
+      },
+    },
     'readme.md': { type: 'file', name: 'readme.md', content: '' },
   },
 

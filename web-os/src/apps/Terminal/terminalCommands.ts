@@ -272,7 +272,7 @@ export function executeCommand(rawInput: string, ctx: CmdContext): CmdResult {
     case 'rmdir':   return cmdRmdir(root, cwd, args, actions);
     case 'echo':    return cmdEcho(root, cwd, args, actions);
     case 'date':    return cmdDate();
-    case 'whoami':  return { lines: [out('insurgent')] };
+    case 'whoami':  return { lines: [out('Tobias Eaton')] };
     case 'edit':    return cmdEdit(root, cwd, args, ctx);
     case 'open':    return cmdOpen(args, ctx);
     default:

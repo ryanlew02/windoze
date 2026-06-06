@@ -4,6 +4,7 @@ import { useThemeStore } from '../../store/useThemeStore';
 import { useViewStore, VIEW_CONFIG, type ViewScale } from '../../store/useViewStore';
 import { useIconStore } from '../../store/useIconStore';
 import { useDesktopItemStore } from '../../store/useDesktopItemStore';
+import { usePinnedStore } from '../../store/usePinnedStore';
 import { factions } from '../../themes/factions';
 import styles from './Settings.module.css';
 
@@ -23,6 +24,7 @@ export function SettingsApp() {
   const { scale, setScale }             = useViewStore();
   const resetIcons                      = useIconStore((s) => s.reset);
   const resetDesktopItems               = useDesktopItemStore((s) => s.reset);
+  const resetPinned                     = usePinnedStore((s) => s.reset);
   const { resetPassword, lock }         = useLockStore();
   const [resetConfirm, setResetConfirm] = useState(false);
 
@@ -30,6 +32,7 @@ export function SettingsApp() {
     if (!resetConfirm) { setResetConfirm(true); return; }
     resetIcons();
     resetDesktopItems();
+    resetPinned();
     resetPassword();
     lock();
     setResetConfirm(false);

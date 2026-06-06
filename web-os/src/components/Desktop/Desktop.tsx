@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { useWindowStore } from '../../store/useWindowStore';
 import { useIconStore } from '../../store/useIconStore';
@@ -185,6 +185,10 @@ const VIEW_LABELS: Record<ViewScale, string> = {
 
 export function Desktop() {
   const apps                              = useAppStore((s) => s.apps);
+  const sortedApps = useMemo(
+    () => [...apps].sort((a, b) => a.title.localeCompare(b.title)),
+    [apps],
+  );
   const { windows, openWindow }          = useWindowStore();
   const { positions, labels, setPosition, setLabel } = useIconStore();
   const factionId                         = useThemeStore((s) => s.factionId);
@@ -223,9 +227,10 @@ export function Desktop() {
     const currentItems = useDesktopItemStore.getState().items;
 
     // App icon positions for collision detection
-    const appPositions = apps.map((app, i) => {
+    const sorted = [...useAppStore.getState().apps].sort((a, b) => a.title.localeCompare(b.title));
+    const appPositions = sorted.map((app, i) => {
       const saved = useIconStore.getState().positions[app.id];
-      return saved ?? { x: (i % COLS) * DEFAULT_GRID, y: Math.floor(i / COLS) * DEFAULT_GRID };
+      return saved ?? { x: GRID_PAD_X + (i % COLS) * DEFAULT_GRID, y: GRID_PAD_Y + Math.floor(i / COLS) * DEFAULT_GRID };
     });
 
     // Add a desktop icon for any file in Desktop/ that doesn't have one yet
@@ -295,8 +300,8 @@ export function Desktop() {
   }
 
   function isOccupied(x: number, y: number, excludeId: string): boolean {
-    for (let i = 0; i < apps.length; i++) {
-      const a = apps[i];
+    for (let i = 0; i < sortedApps.length; i++) {
+      const a = sortedApps[i];
       if (a.id === excludeId) continue;
       const p = getPos(a.id, i);
       if (snap(p.x) === x && snap(p.y) === y) return true;
@@ -331,7 +336,7 @@ export function Desktop() {
       const rect = normalizeRect(start.x, start.y, ex, ey);
       setMarquee(rect);
       const hit = new Set(
-        apps
+        sortedApps
           .filter((app, i) => {
             const p = getPos(app.id, i);
             return rectsIntersect(p.x, p.y, rect.x, rect.y, rect.w, rect.h);
@@ -451,7 +456,7 @@ export function Desktop() {
       onContextMenu={handleDesktopContextMenu}
       onClick={() => { closeMenus(); }}
     >
-      {apps.map((app, index) => {
+      {sortedApps.map((app, index) => {
         const pos         = getPos(app.id, index);
         const label       = labels[app.id] ?? app.title;
         const isRenaming  = renaming?.id === app.id && renaming.kind === 'app';

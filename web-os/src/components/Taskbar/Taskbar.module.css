@@ -15,24 +15,32 @@
 }
 
 .startBtn {
-  width: 44px;
+  width: 40px;
   height: 36px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--accent-dim);
   color: var(--accent);
-  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.1s;
   flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s, transform 0.1s;
 }
 
-.startBtn:hover,
+.startBtn:hover {
+  background: var(--hover-overlay-strong);
+  border-color: var(--border-focused);
+  box-shadow: 0 0 10px var(--accent-glow), inset 0 0 8px var(--accent-dim);
+  transform: scale(1.06);
+}
+
 .active {
   background: var(--accent-dim);
+  border-color: var(--accent);
+  box-shadow: 0 0 14px var(--accent-glow), inset 0 0 10px var(--accent-dim);
+  transform: scale(0.97);
 }
 
 .taskList {
@@ -73,6 +81,75 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.taskPinned {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  height: 36px;
+  max-width: 160px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary, #888);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+  overflow: hidden;
+}
+
+.taskPinned:hover {
+  background: var(--hover-overlay);
+  color: var(--text-primary);
+}
+
+.pinDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+/* ── Context menu ── */
+
+.ctxMenu {
+  position: fixed;
+  bottom: 48px;
+  background: var(--bg-overlay, #1a1a1f);
+  border: 1px solid var(--border, rgba(255,255,255,0.1));
+  border-radius: 8px;
+  padding: 4px;
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 9000;
+}
+
+.ctxItem {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-radius: 5px;
+  color: var(--text-primary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.ctxItem:hover {
+  background: var(--hover-overlay-strong, rgba(255,255,255,0.1));
+}
+
+.ctxSep {
+  height: 1px;
+  background: var(--border, rgba(255,255,255,0.1));
+  margin: 4px 0;
 }
 
 .clock {

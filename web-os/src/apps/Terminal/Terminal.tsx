@@ -21,6 +21,8 @@ const APP_ALIASES: Record<string, string> = {
   aptitude:       'aptitude-test',
   manifesto:      'manifesto',
   fearsim:        'fear-sim',
+  dictionary:     'dictionary',
+  dict:           'dictionary',
 };
 
 const COMMANDS = [

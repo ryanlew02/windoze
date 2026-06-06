@@ -9,6 +9,7 @@ import { SettingsApp } from '../apps/Settings/Settings';
 import { FearSimulationApp } from '../apps/FearSimulation/FearSimulation';
 import { ChessApp } from '../apps/Chess/Chess';
 import { TerminalApp } from '../apps/Terminal/Terminal';
+import { DictionaryApp } from '../apps/Dictionary/Dictionary';
 
 interface AppStore {
   apps: AppDefinition[];
@@ -24,6 +25,7 @@ export const useAppStore = create<AppStore>(() => ({
     { id: 'settings',      title: 'Settings',        icon: '⚙️', component: SettingsApp },
     { id: 'fear-sim',      title: 'Fear Simulation', icon: '⚡', component: FearSimulationApp },
     { id: 'chess',    title: 'Chess',    icon: '♞',  component: ChessApp,    defaultWidth: 520, defaultHeight: 580 },
-    { id: 'terminal', title: 'Terminal', icon: '>_', component: TerminalApp, defaultWidth: 620, defaultHeight: 460 },
+    { id: 'terminal',    title: 'Terminal',    icon: '>_', component: TerminalApp,    defaultWidth: 620, defaultHeight: 460 },
+    { id: 'dictionary',  title: 'Dictionary',  icon: '📖', component: DictionaryApp,  defaultWidth: 640, defaultHeight: 520 },
   ],
 }));
