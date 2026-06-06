@@ -107,11 +107,11 @@ export function AptitudeTestApp() {
   useEffect(() => {
     if (phase !== 'processing') return;
     const id = setTimeout(() => {
-      const isDivergent = BASE_FACTIONS.every((f) => scores[f] === 1);
-      const winner = isDivergent
+      const topScore   = Math.max(...Object.values(scores));
+      const topFactions = BASE_FACTIONS.filter((f) => scores[f] === topScore);
+      const winner     = topFactions.length >= 2
         ? 'divergent'
-        : (Object.entries(scores) as [FactionId, number][])
-            .reduce((a, b) => (b[1] > a[1] ? b : a))[0];
+        : topFactions[0];
       setResult(winner);
       setPhase('result');
     }, 2200);

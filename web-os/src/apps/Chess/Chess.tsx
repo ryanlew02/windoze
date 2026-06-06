@@ -63,7 +63,7 @@ function PlayerBar({
     <div className={styles.playerBar}>
       <div className={styles.capturedPieces}>
         {pieces.map((t, i) => (
-          <span key={i} className={styles.capturedPiece}>
+          <span key={`${t}-${i}`} className={styles.capturedPiece}>
             {SYMBOLS[capturedColor][t as PieceType]}
           </span>
         ))}

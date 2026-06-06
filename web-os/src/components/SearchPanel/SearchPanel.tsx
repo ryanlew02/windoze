@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useAppStore } from '../../store/useAppStore';
 import { useWindowStore } from '../../store/useWindowStore';
 import { useFsStore } from '../../store/useFsStore';
@@ -44,7 +44,7 @@ export function SearchPanel({ onClose }: Props) {
     ? apps.filter((a) => a.title.toLowerCase().includes(q))
     : apps;
 
-  const allFiles = collectFiles(root, []);
+  const allFiles = useMemo(() => collectFiles(root, []), [root]);
   const matchedFiles = q
     ? allFiles.filter((f) => f.name.toLowerCase().includes(q))
     : [];

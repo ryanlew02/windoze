@@ -212,7 +212,7 @@ export function Desktop() {
   const desktopRef   = useRef<HTMLDivElement>(null);
   const marqueeStart = useRef<{ x: number; y: number } | null>(null);
   const renameRef    = useRef<HTMLInputElement>(null);
-  const preDragPos   = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const preDragPos   = useRef<Map<string, { x: number; y: number }>>(new Map());
 
   useEffect(() => {
     if (renaming) renameRef.current?.focus();
@@ -311,6 +311,20 @@ export function Desktop() {
     }
     for (const item of desktopItems) {
       if (item.id === excludeId) continue;
+      if (snap(item.x) === x && snap(item.y) === y) return true;
+    }
+    return false;
+  }
+
+  function isOccupiedByOutsider(x: number, y: number, excludeIds: Set<string>): boolean {
+    for (let i = 0; i < sortedApps.length; i++) {
+      const a = sortedApps[i];
+      if (excludeIds.has(a.id)) continue;
+      const p = getPos(a.id, i);
+      if (snap(p.x) === x && snap(p.y) === y) return true;
+    }
+    for (const item of desktopItems) {
+      if (excludeIds.has(item.id)) continue;
       if (snap(item.x) === x && snap(item.y) === y) return true;
     }
     return false;
@@ -468,18 +482,38 @@ export function Desktop() {
         function moveGroup(nx: number, ny: number, finalSnap: boolean) {
           const dx = nx - pos.x;
           const dy = ny - pos.y;
-          selectedIds.forEach((id) => {
-            const i = sortedApps.findIndex((a) => a.id === id);
-            const p = getPos(id, i);
-            const tx = p.x + dx;
-            const ty = p.y + dy;
-            if (finalSnap) {
-              const { x: sx, y: sy } = snapPos(tx, ty);
-              setPosition(id, sx, sy);
+          if (finalSnap) {
+            const targets = new Map<string, { x: number; y: number }>();
+            selectedIds.forEach((id) => {
+              const i = sortedApps.findIndex((a) => a.id === id);
+              const p = getPos(id, i);
+              targets.set(id, snapPos(p.x + dx, p.y + dy));
+            });
+            // Check 1: no two group members land on the same cell (happens when
+            // clamped against a screen edge — multiple icons collapse to same max pos)
+            const cellsSeen = new Set<string>();
+            const noInternalCollision = [...targets.values()].every(({ x, y }) => {
+              const key = `${x},${y}`;
+              if (cellsSeen.has(key)) return false;
+              cellsSeen.add(key);
+              return true;
+            });
+            // Check 2: no target is occupied by an icon outside the group
+            const noExternalCollision = [...targets.values()].every(
+              ({ x, y }) => !isOccupiedByOutsider(x, y, selectedIds),
+            );
+            if (noInternalCollision && noExternalCollision) {
+              targets.forEach((p, id) => setPosition(id, p.x, p.y));
             } else {
-              setPosition(id, tx, ty);
+              preDragPos.current.forEach((p, id) => setPosition(id, p.x, p.y));
             }
-          });
+          } else {
+            selectedIds.forEach((id) => {
+              const i = sortedApps.findIndex((a) => a.id === id);
+              const p = getPos(id, i);
+              setPosition(id, p.x + dx, p.y + dy);
+            });
+          }
         }
 
         return (
@@ -493,7 +527,19 @@ export function Desktop() {
             renaming={!!isRenaming}
             renameValue={isRenaming ? renaming!.value : ''}
             renameRef={renameRef}
-            onDragStart={() => { preDragPos.current = { x: pos.x, y: pos.y }; }}
+            onDragStart={() => {
+              const map = new Map<string, { x: number; y: number }>();
+              if (isGroupDrag) {
+                selectedIds.forEach((id) => {
+                  const i = sortedApps.findIndex((a) => a.id === id);
+                  const p = getPos(id, i);
+                  map.set(id, { x: p.x, y: p.y });
+                });
+              } else {
+                map.set(app.id, { x: pos.x, y: pos.y });
+              }
+              preDragPos.current = map;
+            }}
             onMove={(x, y) => isGroupDrag ? moveGroup(x, y, false) : setPosition(app.id, x, y)}
             onDrop={(x, y) => {
               if (isGroupDrag) { moveGroup(x, y, true); return; }
@@ -501,8 +547,9 @@ export function Desktop() {
               if (!isOccupied(p.x, p.y, app.id)) {
                 setPosition(app.id, p.x, p.y);
               } else {
-                const orig = snapPos(preDragPos.current.x, preDragPos.current.y);
-                setPosition(app.id, orig.x, orig.y);
+                const orig = preDragPos.current.get(app.id) ?? pos;
+                const snapped = snapPos(orig.x, orig.y);
+                setPosition(app.id, snapped.x, snapped.y);
               }
             }}
             onSelect={() => setSelectedIds(new Set([app.id]))}

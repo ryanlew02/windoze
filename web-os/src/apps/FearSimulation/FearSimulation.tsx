@@ -338,6 +338,9 @@ export function FearSimulationApp() {
 
   const resolvedRef = useRef(false);
   const resultsRef  = useRef<Outcome[]>([]);
+  const mountedRef  = useRef(true);
+
+  useEffect(() => { return () => { mountedRef.current = false; }; }, []);
 
   function startSimulation() {
     resolvedRef.current  = false;
@@ -360,6 +363,7 @@ export function FearSimulationApp() {
     setResults(updated);
 
     setTimeout(() => {
+      if (!mountedRef.current) return;
       setIdx((i) => {
         const next = i + 1;
         if (next >= FEARS.length) {
@@ -367,6 +371,7 @@ export function FearSimulationApp() {
         } else {
           setPhase('transition');
           setTimeout(() => {
+            if (!mountedRef.current) return;
             resolvedRef.current = false;
             setTimeLeft(DURATION);
             setOutcome(null);

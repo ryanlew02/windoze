@@ -1,4 +1,4 @@
-import { useState, useRef, KeyboardEvent } from 'react';
+import { useState, KeyboardEvent } from 'react';
 import styles from './Browser.module.css';
 
 const DISCLAIMER_KEY = 'browser-disclaimer-dismissed';
@@ -20,8 +20,6 @@ export function BrowserApp() {
   const [showDisclaimer, setShowDisclaimer] = useState(
     () => localStorage.getItem(DISCLAIMER_KEY) !== 'true',
   );
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-
   function dismissDisclaimer() {
     localStorage.setItem(DISCLAIMER_KEY, 'true');
     setShowDisclaimer(false);
@@ -75,9 +73,10 @@ export function BrowserApp() {
 
   function reload() {
     if (!src) return;
+    const current = src;
     setSrc('');
     setStatus('loading');
-    setTimeout(() => setSrc(src), 50);
+    setTimeout(() => setSrc(current), 50);
   }
 
   function handleKey(e: KeyboardEvent<HTMLInputElement>) {
@@ -210,13 +209,12 @@ export function BrowserApp() {
 
         {src && status !== 'blocked' && (
           <iframe
-            ref={iframeRef}
             className={styles.iframe}
             src={src}
             title="browser"
             onLoad={handleLoad}
             onError={handleError}
-            sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
           />
         )}
       </div>

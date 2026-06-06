@@ -61,7 +61,7 @@ export function FactionBroadcast() {
       setAnimKey((k) => k + 1);
     }, DURATION);
     return () => clearInterval(id);
-  }, [queue.length]);
+  }, []);
 
   return (
     <div className={styles.wrap}>

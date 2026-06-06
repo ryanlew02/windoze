@@ -33,7 +33,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const faction = factions.find((f) => f.id === factionId)!;
+    const faction = factions.find((f) => f.id === factionId) ?? factions[0];
     const root = document.documentElement;
     Object.entries(faction.vars).forEach(([key, value]) => {
       root.style.setProperty(key, value);

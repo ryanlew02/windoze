@@ -28,6 +28,12 @@ export default defineConfig({
             type: 'image/svg+xml',
             purpose: 'any',
           },
+          {
+            src: 'favicon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'maskable',
+          },
         ],
       },
       workbox: {

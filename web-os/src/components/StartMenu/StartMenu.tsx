@@ -37,7 +37,7 @@ export function StartMenu({ onClose }: Props) {
         <span className={styles.osName}>DivergeOS</span>
       </div>
       <div className={styles.appList}>
-        {apps.slice(0, 5).map((app) => (
+        {apps.map((app) => (
           <button key={app.id} className={styles.appRow} onClick={() => launch(app.id)}>
             <span className={styles.appIcon}>{app.icon}</span>
             <span className={styles.appTitle}>{app.title}</span>
@@ -46,7 +46,7 @@ export function StartMenu({ onClose }: Props) {
       </div>
       <div className={styles.footer}>
         <button className={styles.footerBtn} onClick={() => { lock(); onClose(); }}>🔒 Lock</button>
-        <button className={styles.footerBtn} title="Power">⏻ Shut down</button>
+        <button className={styles.footerBtn} onClick={() => { onClose(); window.location.reload(); }}>⏻ Shut down</button>
       </div>
     </div>
   );

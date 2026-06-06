@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLockStore } from '../../store/useLockStore';
+import chicagoBg from '../../assets/chicagobackground.avif';
 import styles from './LockScreen.module.css';
 
 export function LockScreen() {
@@ -38,7 +39,7 @@ export function LockScreen() {
 
   return (
     <div className={`${styles.screen} ${exiting ? styles.exit : ''}`}>
-      <div className={styles.bg} />
+      <div className={styles.bg} style={{ backgroundImage: `url(${chicagoBg})` }} />
 
       <div className={styles.panel}>
         <div className={styles.clock}>

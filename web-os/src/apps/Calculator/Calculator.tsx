@@ -59,9 +59,9 @@ export function CalculatorApp() {
         <span className={styles.value}>{display}</span>
       </div>
       <div className={styles.grid}>
-        {BUTTONS.flat().map((btn, i) => (
+        {BUTTONS.flat().map((btn) => (
           <button
-            key={i}
+            key={btn}
             className={`${styles.btn} ${['÷','×','−','+','='].includes(btn) ? styles.op : ''} ${btn === '0' ? styles.wide : ''}`}
             onClick={() => handleBtn(btn)}
           >

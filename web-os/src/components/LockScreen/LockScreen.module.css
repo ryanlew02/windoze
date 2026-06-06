@@ -16,7 +16,9 @@
 .bg {
   position: absolute;
   inset: 0;
-  background: url('/src/assets/chicagobackground.avif') center/cover no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   filter: blur(6px) brightness(0.35);
   transform: scale(1.05);
 }

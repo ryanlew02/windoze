@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { useLockStore } from '../../store/useLockStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import { useViewStore, VIEW_CONFIG, type ViewScale } from '../../store/useViewStore';
-import { useIconStore } from '../../store/useIconStore';
-import { useDesktopItemStore } from '../../store/useDesktopItemStore';
-import { usePinnedStore } from '../../store/usePinnedStore';
 import { useProfileStore, type ProfileSlot } from '../../store/useProfileStore';
 import { useSoundStore } from '../../store/useSoundStore';
 import { factions } from '../../themes/factions';
@@ -24,10 +21,6 @@ export function SettingsApp() {
   const changePassword                  = useLockStore((s) => s.changePassword);
   const { factionId, setFaction }       = useThemeStore();
   const { scale, setScale }             = useViewStore();
-  const resetIcons                      = useIconStore((s) => s.reset);
-  const resetDesktopItems               = useDesktopItemStore((s) => s.reset);
-  const resetPinned                     = usePinnedStore((s) => s.reset);
-  const { resetPassword, lock }         = useLockStore();
   const [resetConfirm, setResetConfirm] = useState(false);
 
   const { activeSlot, slots, switchProfile, saveCurrentProfile, renameProfile } = useProfileStore();
@@ -36,12 +29,8 @@ export function SettingsApp() {
 
   function handleFactoryReset() {
     if (!resetConfirm) { setResetConfirm(true); return; }
-    resetIcons();
-    resetDesktopItems();
-    resetPinned();
-    resetPassword();
-    lock();
-    setResetConfirm(false);
+    localStorage.clear();
+    location.reload();
   }
 
   const [current, setCurrent]   = useState('');
