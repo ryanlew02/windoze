@@ -7,6 +7,7 @@ interface WindowStore {
   windows: WindowState[];
   openWindow: (win: Omit<WindowState, 'zIndex' | 'isFocused'>) => void;
   closeWindow: (id: string) => void;
+  removeWindow: (id: string) => void;
   focusWindow: (id: string) => void;
   minimizeWindow: (id: string) => void;
   toggleMaximize: (id: string) => void;
@@ -39,6 +40,11 @@ export const useWindowStore = create<WindowStore>((set) => ({
     }),
 
   closeWindow: (id) =>
+    set((state) => ({
+      windows: state.windows.map((w) => w.id === id ? { ...w, isClosing: true } : w),
+    })),
+
+  removeWindow: (id) =>
     set((state) => ({ windows: state.windows.filter((w) => w.id !== id) })),
 
   focusWindow: (id) =>

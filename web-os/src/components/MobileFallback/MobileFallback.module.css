@@ -1,0 +1,40 @@
+.container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--bg-deep, #050409);
+  padding: 32px;
+  text-align: center;
+}
+
+.symbol {
+  font-size: 48px;
+  color: var(--accent, #f472b6);
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 16px var(--accent-glow, rgba(244,114,182,0.6)));
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary, #ffe4f0);
+  letter-spacing: 0.1em;
+  margin: 0;
+}
+
+.message {
+  font-size: 15px;
+  color: var(--text-primary, #ffe4f0);
+  margin: 0;
+}
+
+.sub {
+  font-size: 13px;
+  color: var(--text-muted, #7a4060);
+  margin: 0;
+}

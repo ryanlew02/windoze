@@ -1,3 +1,13 @@
+@keyframes windowOpen {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes windowClose {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}
+
 .window {
   position: absolute;
   display: flex;
@@ -10,6 +20,15 @@
   min-width: 300px;
   min-height: 200px;
   transition: box-shadow 0.15s ease;
+}
+
+.opening {
+  animation: windowOpen 0.12s ease-out;
+}
+
+.closing {
+  animation: windowClose 0.1s ease-in forwards;
+  pointer-events: none;
 }
 
 .focused {
@@ -84,6 +103,55 @@
 
 .transparent {
   background: transparent;
+}
+
+/* ── Error boundary ── */
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 32px;
+  color: var(--close-color);
+}
+
+.errorMsg {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.errorDetail {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin: 0;
+  max-width: 280px;
+  word-break: break-word;
+}
+
+.errorRetry {
+  margin-top: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--border-focused);
+  border-radius: 4px;
+  background: var(--btn-bg);
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.errorRetry:hover {
+  background: var(--btn-hover);
 }
 
 /* ── Resize handles ── */

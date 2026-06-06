@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { playBootChime } from '../../audio/sounds';
+import { useSoundStore } from '../../store/useSoundStore';
 import styles from './BootScreen.module.css';
 
 const BOOT_MS = 3400;
@@ -19,7 +21,10 @@ export function BootScreen({ onDone }: Props) {
   const [exiting, setExiting] = useState(false);
 
   useEffect(() => {
-    const exitTimer = setTimeout(() => setExiting(true), BOOT_MS);
+    const exitTimer = setTimeout(() => {
+      setExiting(true);
+      if (useSoundStore.getState().enabled) playBootChime();
+    }, BOOT_MS);
     const doneTimer = setTimeout(onDone, BOOT_MS + FADE_MS);
     return () => { clearTimeout(exitTimer); clearTimeout(doneTimer); };
   }, [onDone]);

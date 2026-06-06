@@ -314,6 +314,157 @@
 }
 
 
+/* ── Sound toggle ── */
+
+.soundRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle {
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: none;
+  background: var(--btn-bg);
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  padding: 0;
+}
+
+.toggleOn {
+  background: var(--accent);
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 0.2s, background 0.2s;
+  display: block;
+}
+
+.toggleOn .toggleThumb {
+  transform: translateX(20px);
+  background: var(--bg-deep);
+}
+
+/* ── Profiles ── */
+
+.profileGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profileCard {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.15s;
+}
+
+.profileCardActive {
+  border-color: var(--f-color);
+  background: color-mix(in srgb, var(--f-color) 6%, var(--bg-surface));
+}
+
+.profileTop {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.profileSymbol {
+  font-size: 28px;
+  line-height: 1;
+  color: var(--f-color);
+  filter: drop-shadow(0 0 6px var(--f-color));
+  flex-shrink: 0;
+}
+
+.profileInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.profileName {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: left;
+}
+
+.profileName:hover .profileEditHint {
+  opacity: 1;
+}
+
+.profileEditHint {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.profileNameInput {
+  background: var(--bg-base);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 3px 8px;
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  outline: none;
+  width: 100%;
+}
+
+.profileFaction {
+  font-size: 11px;
+  color: var(--f-color);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.profileActiveBadge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--f-color);
+  border: 1px solid var(--f-color);
+  border-radius: 4px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+}
+
+.profileActions {
+  display: flex;
+  gap: 8px;
+}
+
 /* ── Hint ── */
 
 .hint {

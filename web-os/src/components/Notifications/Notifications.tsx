@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNotificationStore, type AppNotification } from '../../store/useNotificationStore';
+import { playNotification } from '../../audio/sounds';
+import { playSound } from '../../store/useSoundStore';
 import styles from './Notifications.module.css';
 
 const DURATION = 3000;
@@ -33,7 +35,14 @@ function NotificationCard({ notif }: { notif: AppNotification }) {
 }
 
 export function Notifications() {
-  const items = useNotificationStore((s) => s.items);
+  const items   = useNotificationStore((s) => s.items);
+  const prevLen = useRef(items.length);
+
+  useEffect(() => {
+    if (items.length > prevLen.current) playSound(playNotification);
+    prevLen.current = items.length;
+  }, [items.length]);
+
   return (
     <div className={styles.container}>
       {items.map((n) => (

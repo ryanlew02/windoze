@@ -5,6 +5,7 @@ interface PinnedState {
   pinnedIds: string[];
   pin: (appId: string) => void;
   unpin: (appId: string) => void;
+  load: (ids: string[]) => void;
   reset: () => void;
 }
 
@@ -18,6 +19,7 @@ export const usePinnedStore = create<PinnedState>()(
         })),
       unpin: (appId) =>
         set((s) => ({ pinnedIds: s.pinnedIds.filter((id) => id !== appId) })),
+      load: (ids) => set({ pinnedIds: ids }),
       reset: () => set({ pinnedIds: [] }),
     }),
     { name: 'diverge-pinned' },

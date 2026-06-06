@@ -20,6 +20,7 @@ export interface WindowState {
   isMinimized: boolean;
   isMaximized: boolean;
   isFocused: boolean;
+  isClosing?: boolean;
   zIndex: number;
   componentProps?: Record<string, unknown>;
 }

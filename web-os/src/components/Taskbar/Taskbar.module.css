@@ -184,10 +184,47 @@
   margin: 4px 0;
 }
 
-.clock {
+.installBtn {
   padding: 0 12px;
+  height: 28px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+
+.installBtn:hover {
+  background: var(--accent);
+  color: var(--bg-deep);
+}
+
+.clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  padding: 0 12px;
+  flex-shrink: 0;
+  line-height: 1;
+  cursor: default;
+}
+
+.clockTime {
   color: var(--text-primary);
   font-size: 13px;
+  font-weight: 500;
   white-space: nowrap;
-  flex-shrink: 0;
+}
+
+.clockDate {
+  color: var(--text-muted);
+  font-size: 10px;
+  white-space: nowrap;
 }

@@ -236,6 +236,12 @@ export function TerminalApp() {
   // ── Key handler ─────────────────────────────────────────────────────────────
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+      e.preventDefault();
+      setLines([]);
+      return;
+    }
+
     if (e.key === 'Tab') {
       e.preventDefault();
       tabComplete();

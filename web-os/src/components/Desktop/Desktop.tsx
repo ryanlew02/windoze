@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { playWindowOpen } from '../../audio/sounds';
+import { playSound } from '../../store/useSoundStore';
 import { useAppStore } from '../../store/useAppStore';
 import { useWindowStore } from '../../store/useWindowStore';
 import { useIconStore } from '../../store/useIconStore';
@@ -18,7 +20,7 @@ import candorBg     from '../../assets/candor_bg.png';
 import divergentBg  from '../../assets/divergent_bg.png';
 import styles from './Desktop.module.css';
 
-const COLS         = 2;
+const COLS         = 3;
 const DEFAULT_GRID = 96; // default positions are always in normal-scale pixels
 const GRID_PAD_X   = 12; // left inset so icons don't sit flush with the screen edge
 const GRID_PAD_Y   = 12; // top inset
@@ -267,6 +269,7 @@ export function Desktop() {
     (appId: string) => {
       const app = apps.find((a) => a.id === appId);
       if (!app) return;
+      playSound(playWindowOpen);
       openWindow({
         id: `${appId}-${Date.now()}`,
         appId: app.id,
@@ -547,7 +550,9 @@ export function Desktop() {
         const AppComponent = app.component;
         return (
           <Window key={win.id} win={win}>
-            <AppComponent {...(win.componentProps ?? {})} />
+            <Suspense fallback={<div className={styles.appLoading}>Loading…</div>}>
+              <AppComponent {...(win.componentProps ?? {})} />
+            </Suspense>
           </Window>
         );
       })}

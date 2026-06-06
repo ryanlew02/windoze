@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/DivergeOS/dev-sw.js?dev-sw', { scope: '/DivergeOS/', type: 'classic' })

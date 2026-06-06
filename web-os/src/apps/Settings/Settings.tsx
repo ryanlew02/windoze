@@ -5,10 +5,12 @@ import { useViewStore, VIEW_CONFIG, type ViewScale } from '../../store/useViewSt
 import { useIconStore } from '../../store/useIconStore';
 import { useDesktopItemStore } from '../../store/useDesktopItemStore';
 import { usePinnedStore } from '../../store/usePinnedStore';
+import { useProfileStore, type ProfileSlot } from '../../store/useProfileStore';
+import { useSoundStore } from '../../store/useSoundStore';
 import { factions } from '../../themes/factions';
 import styles from './Settings.module.css';
 
-type Section = 'security' | 'appearance' | 'display' | 'reset';
+type Section = 'security' | 'appearance' | 'display' | 'profiles' | 'reset';
 
 const VIEW_OPTIONS: { scale: ViewScale; label: string; description: string }[] = [
   { scale: 'small',  label: 'Small',  description: 'Compact icons and windows' },
@@ -27,6 +29,10 @@ export function SettingsApp() {
   const resetPinned                     = usePinnedStore((s) => s.reset);
   const { resetPassword, lock }         = useLockStore();
   const [resetConfirm, setResetConfirm] = useState(false);
+
+  const { activeSlot, slots, switchProfile, saveCurrentProfile, renameProfile } = useProfileStore();
+  const { enabled: soundEnabled, toggle: toggleSound } = useSoundStore();
+  const [editingName, setEditingName] = useState<{ slot: ProfileSlot; value: string } | null>(null);
 
   function handleFactoryReset() {
     if (!resetConfirm) { setResetConfirm(true); return; }
@@ -86,6 +92,12 @@ export function SettingsApp() {
           onClick={() => setSection('display')}
         >
           <span>🔍</span> Display
+        </button>
+        <button
+          className={`${styles.navItem} ${section === 'profiles' ? styles.navActive : ''}`}
+          onClick={() => setSection('profiles')}
+        >
+          <span>👤</span> Profiles
         </button>
         <button
           className={`${styles.navItem} ${section === 'reset' ? styles.navActive : ''}`}
@@ -183,6 +195,99 @@ export function SettingsApp() {
               </div>
             </div>
 
+            <div className={styles.card}>
+              <div className={styles.soundRow}>
+                <div className={styles.cardHeader} style={{ flex: 1, marginBottom: 0 }}>
+                  <span className={styles.cardIcon}>🔊</span>
+                  <div>
+                    <p className={styles.cardTitle}>OS Sounds</p>
+                    <p className={styles.cardSub}>Window open/close, notifications, and boot chime.</p>
+                  </div>
+                </div>
+                <button
+                  className={`${styles.toggle} ${soundEnabled ? styles.toggleOn : ''}`}
+                  onClick={toggleSound}
+                  aria-label="Toggle sound"
+                >
+                  <span className={styles.toggleThumb} />
+                </button>
+              </div>
+            </div>
+          </>
+        )}
+
+        {section === 'profiles' && (
+          <>
+            <h2 className={styles.sectionTitle}>Profiles</h2>
+
+            <div className={styles.profileGrid}>
+              {(['slot1', 'slot2'] as ProfileSlot[]).map((slot) => {
+                const profile = slots[slot];
+                const isActive = slot === activeSlot;
+                const faction = factions.find((f) => f.id === profile.factionId);
+                const isEditing = editingName?.slot === slot;
+                return (
+                  <div
+                    key={slot}
+                    className={`${styles.profileCard} ${isActive ? styles.profileCardActive : ''}`}
+                    style={{ '--f-color': faction?.color ?? 'var(--accent)' } as React.CSSProperties}
+                  >
+                    <div className={styles.profileTop}>
+                      <span className={styles.profileSymbol}>{faction?.symbol ?? '✦'}</span>
+                      <div className={styles.profileInfo}>
+                        {isEditing ? (
+                          <input
+                            className={styles.profileNameInput}
+                            value={editingName.value}
+                            autoFocus
+                            onChange={(e) => setEditingName({ slot, value: e.target.value })}
+                            onBlur={() => {
+                              if (editingName.value.trim()) renameProfile(slot, editingName.value.trim());
+                              setEditingName(null);
+                            }}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                if (editingName.value.trim()) renameProfile(slot, editingName.value.trim());
+                                setEditingName(null);
+                              }
+                              if (e.key === 'Escape') setEditingName(null);
+                            }}
+                          />
+                        ) : (
+                          <button
+                            className={styles.profileName}
+                            onClick={() => setEditingName({ slot, value: profile.name })}
+                            title="Click to rename"
+                          >
+                            {profile.name}
+                            <span className={styles.profileEditHint}>✎</span>
+                          </button>
+                        )}
+                        <span className={styles.profileFaction}>{faction?.name ?? 'Unknown'}</span>
+                      </div>
+                      {isActive && <span className={styles.profileActiveBadge}>Active</span>}
+                    </div>
+
+                    <div className={styles.profileActions}>
+                      {isActive ? (
+                        <button className={styles.btn} onClick={saveCurrentProfile}>
+                          Save Profile
+                        </button>
+                      ) : (
+                        <button className={styles.btn} onClick={() => switchProfile(slot)}>
+                          Switch to this Profile
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.hint}>
+              <span className={styles.hintIcon}>ⓘ</span>
+              Profiles save faction, view scale, pinned apps, and icon layout. Use <strong>Save Profile</strong> to capture your current settings before switching.
+            </div>
           </>
         )}
 

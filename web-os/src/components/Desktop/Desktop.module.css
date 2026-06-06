@@ -1,3 +1,13 @@
+.appLoading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-muted);
+  font-size: 13px;
+  letter-spacing: 0.04em;
+}
+
 .desktop {
   position: fixed;
   inset: 0;

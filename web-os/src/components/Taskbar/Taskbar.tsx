@@ -6,6 +6,9 @@ import { StartMenu } from '../StartMenu/StartMenu';
 import { SearchPanel } from '../SearchPanel/SearchPanel';
 import { FactionPicker } from '../FactionPicker/FactionPicker';
 import { FactionBroadcast } from '../FactionBroadcast/FactionBroadcast';
+import { playWindowOpen } from '../../audio/sounds';
+import { playSound } from '../../store/useSoundStore';
+import { usePWAInstall } from '../../hooks/usePWAInstall';
 import styles from './Taskbar.module.css';
 
 interface CtxState {
@@ -20,6 +23,7 @@ export function Taskbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [ctx, setCtx] = useState<CtxState | null>(null);
+  const { canInstall, install } = usePWAInstall();
 
   const windows = useWindowStore((s) => s.windows);
   const { focusWindow, minimizeWindow, closeWindow, openWindow } = useWindowStore();
@@ -65,6 +69,7 @@ export function Taskbar() {
   function launchApp(appId: string) {
     const app = apps.find((a) => a.id === appId);
     if (!app) return;
+    playSound(playWindowOpen);
     openWindow({
       id: `${appId}-${Date.now()}`,
       appId: app.id,
@@ -154,8 +159,19 @@ export function Taskbar() {
 
       <FactionPicker />
 
+      {canInstall && (
+        <button className={styles.installBtn} onClick={install} title="Install DivergeOS">
+          ⬇ Install
+        </button>
+      )}
+
       <div className={styles.clock}>
-        {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        <span className={styles.clockTime}>
+          {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        </span>
+        <span className={styles.clockDate}>
+          {time.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' })}
+        </span>
       </div>
 
       {ctx && (

@@ -3,6 +3,9 @@ import { useWindowStore } from '../../store/useWindowStore';
 import { useDraggable } from '../../hooks/useDraggable';
 import { useResizable, type ResizeDir } from '../../hooks/useResizable';
 import type { WindowState } from '../../types';
+import { WindowErrorBoundary } from './WindowErrorBoundary';
+import { playWindowClose } from '../../audio/sounds';
+import { playSound } from '../../store/useSoundStore';
 import styles from './Window.module.css';
 
 interface Props {
@@ -11,7 +14,7 @@ interface Props {
 }
 
 export function Window({ win, children }: Props) {
-  const { closeWindow, focusWindow, minimizeWindow, toggleMaximize, moveWindow, resizeMoveWindow } =
+  const { closeWindow, removeWindow, focusWindow, minimizeWindow, toggleMaximize, moveWindow, resizeMoveWindow } =
     useWindowStore();
 
   const handleMove = useCallback(
@@ -35,11 +38,21 @@ export function Window({ win, children }: Props) {
     ? { top: 0, left: 0, width: '100%', height: '100%', zIndex: win.zIndex }
     : { top: win.y, left: win.x, width: win.width, height: win.height, zIndex: win.zIndex };
 
+  const windowClass = [
+    styles.window,
+    win.isFocused ? styles.focused : '',
+    win.appId === 'terminal' ? styles.transparent : '',
+    win.isClosing ? styles.closing : styles.opening,
+  ].filter(Boolean).join(' ');
+
   return (
     <div
-      className={`${styles.window} ${win.isFocused ? styles.focused : ''} ${win.appId === 'terminal' ? styles.transparent : ''}`}
+      className={windowClass}
       style={style}
       onMouseDown={() => focusWindow(win.id)}
+      onAnimationEnd={() => {
+        if (win.isClosing) removeWindow(win.id);
+      }}
     >
       {!win.isMaximized && dirs.map((dir) => (
         <div
@@ -60,10 +73,12 @@ export function Window({ win, children }: Props) {
           <button onClick={() => toggleMaximize(win.id)} title="Maximize">
             {win.isMaximized ? '❐' : '□'}
           </button>
-          <button className={styles.close} onClick={() => closeWindow(win.id)} title="Close">✕</button>
+          <button className={styles.close} onClick={() => { playSound(playWindowClose); closeWindow(win.id); }} title="Close">✕</button>
         </div>
       </div>
-      <div className={styles.content}>{children}</div>
+      <div className={styles.content}>
+        <WindowErrorBoundary>{children}</WindowErrorBoundary>
+      </div>
     </div>
   );
 }
