@@ -146,6 +146,14 @@
   margin-left: 2px;
 }
 
+.task svg,
+.taskPinned svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+}
+
 /* ── Context menu ── */
 
 .ctxMenu {

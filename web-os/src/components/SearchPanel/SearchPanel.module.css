@@ -90,10 +90,17 @@
 }
 
 .rowIcon {
-  font-size: 18px;
   width: 24px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+}
+
+.rowIcon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
 }
 
 .rowTitle {
@@ -108,9 +115,19 @@
   align-items: center;
   gap: 12px;
   padding: 7px 10px;
+  background: transparent;
+  border: none;
   border-radius: 6px;
   color: var(--text-primary);
   font-size: 13px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.1s;
+}
+
+.fileRow:hover {
+  background: var(--hover-overlay);
 }
 
 .fileInfo {

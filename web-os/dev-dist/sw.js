@@ -81,7 +81,7 @@ define(['./workbox-25613826'], (function (workbox) { 'use strict';
     "revision": "ab17d503f8cc842198995eaef9c44121"
   }, {
     "url": "/DivergeOS/index.html",
-    "revision": "0.58r51i280k8"
+    "revision": "0.g852l5pg56k"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/DivergeOS/index.html"), {

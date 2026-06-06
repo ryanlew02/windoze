@@ -101,7 +101,7 @@ function DraggableIcon({
     >
       {renaming ? (
         <div className={styles.floatingIcon}>
-          <span className={styles.floatingEmoji}>{app.icon}</span>
+          <span className={styles.floatingEmoji} style={{ background: app.iconBg }}>{app.icon}</span>
           <input
             ref={renameRef}
             className={styles.renameInput}

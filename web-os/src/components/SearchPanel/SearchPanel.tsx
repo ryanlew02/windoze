@@ -11,15 +11,18 @@ interface Props {
 
 interface FileResult {
   name: string;
-  path: string;
+  pathParts: string[];
+  displayPath: string;
 }
 
 function collectFiles(nodes: Record<string, FsNode>, pathParts: string[]): FileResult[] {
   const results: FileResult[] = [];
   for (const [key, node] of Object.entries(nodes)) {
     if (node.type === 'file') {
-      results.push({ name: node.name, path: [...pathParts, key].join(' / ') });
-    } else {
+      if (!key.endsWith('.exe')) {
+        results.push({ name: node.name, pathParts, displayPath: [...pathParts, key].join(' / ') });
+      }
+    } else if (key !== 'Programs') {
       results.push(...collectFiles(node.children, [...pathParts, key]));
     }
   }
@@ -67,6 +70,26 @@ export function SearchPanel({ onClose }: Props) {
     onClose();
   }
 
+  function openFile(file: FileResult) {
+    const notepadApp = apps.find((a) => a.id === 'notepad');
+    if (!notepadApp) return;
+    const fileKey = [...file.pathParts, file.name].join('/');
+    openWindow({
+      id: `notepad:${fileKey}-${Date.now()}`,
+      appId: `notepad:${fileKey}`,
+      title: file.name,
+      icon: '📄',
+      x: 80 + Math.random() * 120,
+      y: 60 + Math.random() * 80,
+      width: notepadApp.defaultWidth ?? 560,
+      height: notepadApp.defaultHeight ?? 420,
+      isMinimized: false,
+      isMaximized: false,
+      componentProps: { filePath: file.pathParts, fileName: file.name },
+    });
+    onClose();
+  }
+
   return (
     <div className={styles.panel}>
       <div className={styles.searchRow}>
@@ -102,13 +125,13 @@ export function SearchPanel({ onClose }: Props) {
           <div className={styles.section}>
             <div className={styles.sectionLabel}>Files</div>
             {matchedFiles.slice(0, 8).map((f) => (
-              <div key={f.path} className={styles.fileRow}>
+              <button key={f.displayPath} className={styles.fileRow} onClick={() => openFile(f)}>
                 <span className={styles.rowIcon}>📄</span>
                 <div className={styles.fileInfo}>
                   <span className={styles.rowTitle}>{f.name}</span>
-                  <span className={styles.filePath}>{f.path}</span>
+                  <span className={styles.filePath}>{f.displayPath}</span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         )}

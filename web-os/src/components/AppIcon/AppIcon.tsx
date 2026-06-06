@@ -14,7 +14,9 @@ export function AppIcon({ app, onClick, selected }: Props) {
       onDoubleClick={onClick}
       title={app.title}
     >
-      <span className={styles.emoji}>{app.icon}</span>
+      <span className={styles.tile} style={{ background: app.iconBg }}>
+        <span className={styles.emoji}>{app.icon}</span>
+      </span>
       <span className={styles.label}>{app.title}</span>
     </button>
   );

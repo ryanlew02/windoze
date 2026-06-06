@@ -124,6 +124,7 @@
   color: #555;
   transition: color 0.3s;
   letter-spacing: 1px;
+  user-select: none;
 }
 
 /* ── Fear info ── */

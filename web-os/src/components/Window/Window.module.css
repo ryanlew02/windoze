@@ -53,7 +53,14 @@
 }
 
 .icon {
-  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
 }
 
 .title {

@@ -1,7 +1,8 @@
 export interface AppDefinition {
   id: string;
   title: string;
-  icon: string;
+  icon: React.ReactNode;
+  iconBg?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   component: React.ComponentType<any>;
   defaultWidth?: number;
@@ -12,7 +13,7 @@ export interface WindowState {
   id: string;
   appId: string;
   title: string;
-  icon: string;
+  icon: React.ReactNode;
   x: number;
   y: number;
   width: number;
